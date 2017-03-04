@@ -1,0 +1,18 @@
+PotsgreSQL is assumed.
+
+Table 'messages':
+
+	id - unique, auto-incrementing ID
+	received - TIMESTAMP (not going to assume these will be unique,
+		hence the id column)
+	message_raw JSON
+	message JSONB
+
+CREATE TABLE messages (
+	id SERIAL NOT NULL,
+	received TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	message_raw JSON NOT NULL,
+	message JSONB,
+	PRIMARY KEY(id, received)
+);
+
