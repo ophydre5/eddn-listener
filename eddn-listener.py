@@ -23,10 +23,6 @@ __debugEDDN       = False
 __logVerboseFile    = os.path.dirname(__file__) + '/Logs_Verbose_EDDN_%DATE%.htm'
 #__logVerboseFile    = False
 
-# Set to False if you do not want JSON logging
-__logJSONFile       = os.path.dirname(__file__) + '/Logs_JSON_EDDN_%DATE%.log'
-#__logJSONFile       = False
-
 # List of blacklisted softwares
 __blacklistedSoftwares   = [
   'ed-ibe (api)',
@@ -105,17 +101,6 @@ def echoLog(__str):
     f.write(__str + '\n')
     f.close()
   
-
-def echoLogJSON(__json):
-  global __logJSONFile
-  
-  if __logJSONFile != False:
-    __logJSONFileParsed = __logJSONFile.replace('%DATE%', str(date('%Y-%m-%d')))
-    
-    f = open(__logJSONFileParsed, 'a')
-    f.write(str(__json) + '\n')
-    f.close()
-    
 
 def main():
   echoLog('Starting EDDN Subscriber')
