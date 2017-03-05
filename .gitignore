@@ -1,3 +1,4 @@
 .*.sw?
 .sw?
 Logs_Verbose_EDDN*.htm
+logs/
