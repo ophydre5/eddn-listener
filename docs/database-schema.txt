@@ -19,3 +19,23 @@ CREATE TABLE messages (
 
 Can do queries such as:
 SELECT id,received,message->'message' FROM messages WHERE message @> '{"message":{"event":"FSDJump"}}'::jsonb;
+
+SELECT DISTINCT message->'header'->'softwareName' AS softwareName, COUNT(message->'header'->'softwareName') AS count FROM messages GROUP BY message->'header'->'softwareName' ORDER BY count DESC;
+           softwarename           | count 
+----------------------------------+-------
+ "E:D Market Connector [Windows]" | 40856
+ "EDDiscovery"                    | 20591
+ "EDDI"                           | 11333
+ "ED-IBE (API)"                   |  2222
+ "Elite G19s Companion App"       |  1019
+ "EVA [iPad]"                     |   251
+ "E:D Market Connector [Mac OS]"  |   167
+ "EVA [Android]"                  |   139
+ "EVA [iPhone]"                   |   117
+ "E:D Market Connector [Linux]"   |    68
+ "Elite: Assistant"               |    20
+ "EDAPI Trade Dangerous Plugin"   |     2
+(12 rows)
+
+Time: 2860.728 ms
+
