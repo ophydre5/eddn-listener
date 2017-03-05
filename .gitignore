@@ -1,4 +1,5 @@
 .*.sw?
 .sw?
 Logs_Verbose_EDDN*.htm
+__pycache__/
 logs/
