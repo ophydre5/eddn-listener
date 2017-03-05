@@ -3,12 +3,17 @@
 #
 #
 
+import sys, os
+import logging
+import argparse
+
 import zlib
 import zmq
+
 import simplejson
-import sys, os, datetime, time
 from jsonschema import validate
 import re
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects import postgresql
@@ -25,10 +30,6 @@ __timeoutEDDN       = 600000
 
 # Set False to listen to production stream
 __debugEDDN       = False
-
-# Set to False if you do not want verbose logging
-__logVerboseFile    = os.path.dirname(__file__) + '/Logs_Verbose_EDDN_%DATE%.htm'
-#__logVerboseFile    = False
 
 ###########################################################################
 # Database
@@ -89,37 +90,10 @@ __knownSchemas = {
 """
  "  Start
 """
-def date(__format):
-  d = datetime.datetime.utcnow()
-  return d.strftime(__format)
 
-
-__oldTime = False
-def echoLog(__str):
-  global __oldTime, __logVerboseFile
-  
-  if __logVerboseFile != False:
-    __logVerboseFileParsed = __logVerboseFile.replace('%DATE%', str(date('%Y-%m-%d')))
-  
-  if __logVerboseFile != False and not os.path.exists(__logVerboseFileParsed):
-    f = open(__logVerboseFileParsed, 'w')
-    f.write('<style type="text/css">html { white-space: pre; font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; }</style>')
-    f.close()
-
-  if (__oldTime == False) or (__oldTime != date('%H:%M:%S')):
-    __oldTime = date('%H:%M:%S')
-    __str = str(__oldTime)  + ' | ' + str(__str)
-  else:
-    __str = '    '  + ' | ' + str(__str)
-    
-  print (__str)
-  sys.stdout.flush()
-
-  if __logVerboseFile != False:
-    f = open(__logVerboseFileParsed, 'a')
-    f.write(__str + '\n')
-    f.close()
-  
+###########################################################################
+# Setup SQLAlchemy-related classes/data
+###########################################################################
 Base = declarative_base()
 class Message(Base):
   __tablename__ = 'messages'
@@ -128,16 +102,43 @@ class Message(Base):
   received = Column(TIMESTAMP, nullable=False, server_default=text('NOW()'), index=True)
   message_raw = Column(JSON)
   message = Column(JSONB)
+###########################################################################
 
+###########################################################################
+# Logging
+###########################################################################
+os.environ['TZ'] = 'UTC'
+__default_loglevel = logging.INFO
+logger = logging.getLogger('eddnlistener')
+logger.setLevel(__default_loglevel)
+logger_ch = logging.StreamHandler()
+logger_ch.setLevel(__default_loglevel)
+logger_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger_formatter.default_time_format = '%Y-%m-%d %H:%M:%S';
+logger_formatter.default_msec_format = '%s.%03d'
+logger_ch.setFormatter(logger_formatter)
+logger.addHandler(logger_ch)
+###########################################################################
+
+###########################################################################
+# Command-Line Arguments
+###########################################################################
+parser = argparse.ArgumentParser()
+parser.add_argument("--loglevel", help="set the log level to one of: DEBUG, INFO (default), WARNING, ERROR, CRITICAL")
+args = parser.parse_args()
+if args.loglevel:
+  level = getattr(logging, args.loglevel.upper())
+  logger.setLevel(level)
+  logger_ch.setLevel(level)
+###########################################################################
 
 def main():
-  echoLog('Initialising Database Connection')
+  logger.info('Initialising Database Connection')
   db_engine = create_engine(__databaseURL);
   Base.metadata.create_all(db_engine)
   Session = sessionmaker(bind=db_engine)
 
-  echoLog('Starting EDDN Subscriber')
-  echoLog('')
+  logger.info('Starting EDDN Subscriber')
   
   context   = zmq.Context()
   subscriber  = context.socket(zmq.SUB)
@@ -148,77 +149,73 @@ def main():
   while True:
     try:
       subscriber.connect(__relayEDDN)
-      echoLog('Connect to ' + __relayEDDN)
-      echoLog('')
-      echoLog('')
+      logger.info('Connect to ' + __relayEDDN)
       
       while True:
         __message   = subscriber.recv()
         
         if __message == False:
           subscriber.disconnect(__relayEDDN)
-          echoLog('Disconnect from ' + __relayEDDN)
-          echoLog('')
-          echoLog('')
+          logger.warning('Disconnect from ' + __relayEDDN)
           break
         
-        echoLog('Got a message')
+        logger.debug('Got a message')
 
         __message   = zlib.decompress(__message)
         if __message == False:
-          echoLog('Failed to decompress message')
+          logger.warning('Failed to decompress message')
           continue
 
         __json    = simplejson.loads(__message)
         if __json == False:
-          echoLog('Failed to parse message as json')
+          logger.warning('Failed to parse message as json')
           continue
-        #echoLog(__json)
+        #logger.info(__json)
         
         ###############################################################
         # Validate message against relevant schema
         ###############################################################
         if not '$schemaRef' in __json:
-          echoLog("Message doesn't have a $schemaRef")
+          logger.warning("Message doesn't have a $schemaRef")
           continue
 
         # Pull the schema part out
         __schema = re.match('^http:\/\/schemas\.elite-markets\.net\/eddn\/(?P<part>[^\/]+)\/[0-9]+', __json['$schemaRef'])
         if not __schema:
-          echoLog("$schemaRef did not match regex: " + __json['$schemaRef'])
+          logger.warning("$schemaRef did not match regex: " + __json['$schemaRef'])
           continue
 
         if not __schema.group('part'):
-          echoLog("Couldn't find 'part' in $schemaRef" + __json['$schemaRef'])
+          logger.warning("Couldn't find 'part' in $schemaRef" + __json['$schemaRef'])
           continue
 
         if not __schema.group('part') in __knownSchemas:
-          echoLog("Unknown schema: " + __json['$schemaRef'])
+          logger.warning("Unknown schema: " + __json['$schemaRef'])
           continue
 
         schemainfo = __knownSchemas[__schema.group('part')]
         if not schemainfo['message_schema'] == __json['$schemaRef']:
-          echoLog("In-message %schemaRef (" + __json['$schemaRef'] + ") doesn't precisely match expected schemaRef (" + schemainfo['message_schema'] + ")")
+          logger.warning("In-message %schemaRef (" + __json['$schemaRef'] + ") doesn't precisely match expected schemaRef (" + schemainfo['message_schema'] + ")")
           continue
 
         if not schemainfo['schema']:
-          echoLog("Schema '" + __schema.group('part') + "' not yet loaded, doing so...")
+          logger.debug("Schema '" + __schema.group('part') + "' not yet loaded, doing so...")
           filename = "schemas/" + schemainfo['local_schema']
           schema_fd = open(filename, 'rt')
           schema_str = schema_fd.read(None)
           schemainfo['schema'] = simplejson.loads(schema_str)
           schema_fd.close()
-          #echoLog("loaded schema: " + schemainfo['schema'])
+          #logger.debug("loaded schema: " + schemainfo['schema'])
 
-        #echoLog("validate on received json: " + str(__json))
+        #logger.debug("validate on received json: " + str(__json))
         try:
           validate(__json, schemainfo['schema'])
-          echoLog("Message validates against schema.")
+          logger.debug("Message validates against schema.")
         except SchemaError as e:
-          echoLog("Schema for " + __schema.group('part') + " wasn't valid")
+          logger.warning("Schema for " + __schema.group('part') + " wasn't valid")
           continue
         except ValidationError as e:
-          echoLog("Message failed to validate against schema")
+          logger.warning("Message failed to validate against schema")
         ###############################################################
 
         ###############################################################
@@ -227,7 +224,7 @@ def main():
         blackListed = False
         if __json['header']['softwareName'] in __blacklistedSoftwares:
           blackListed = True
-          echoLog("Blacklisted softwareName: " + __json['header']['softwareName'])
+          logger.info("Blacklisted softwareName: " + __json['header']['softwareName'])
         ###############################################################
 
         ###############################################################
@@ -240,11 +237,9 @@ def main():
         ###############################################################
 
     except zmq.ZMQError as e:
-      echoLog('')
-      echoLog('ZMQSocketException: ' + str(e))
+      logger.error('ZMQSocketException: ' + str(e))
       subscriber.disconnect(__relayEDDN)
-      echoLog('Disconnect from ' + __relayEDDN)
-      echoLog('')
+      logger.warning('Disconnect from ' + __relayEDDN)
       time.sleep(5)
       
     
