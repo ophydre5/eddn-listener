@@ -13,6 +13,9 @@ CREATE TABLE messages (
 	received TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	message_raw JSON NOT NULL,
 	message JSONB,
-	PRIMARY KEY(id, received)
+	PRIMARY KEY(id),
+	INDEX(id)
 );
 
+Can do queries such as:
+SELECT id,received,message->'message' FROM messages WHERE message @> '{"message":{"event":"FSDJump"}}'::jsonb;
