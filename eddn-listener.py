@@ -173,6 +173,7 @@ def main():
         if __json == False:
           echoLog('Failed to parse message as json')
           continue
+        #echoLog(__json)
         
         ###############################################################
         # Validate message against relevant schema
@@ -221,9 +222,17 @@ def main():
         ###############################################################
 
         ###############################################################
+        # Check against blacklist
+        ###############################################################
+        blackListed = False
+        if __json['header']['softwareName'] in __blacklistedSoftwares:
+          blackListed = True
+          echoLog("Blacklisted softwareName: " + __json['header']['softwareName'])
+        ###############################################################
+
+        ###############################################################
         # Insert data into database
         ###############################################################
-        echoLog(__json)
         db_msg = Message(message_raw=__json, message=__json)
         session = Session()
         session.add(db_msg)
