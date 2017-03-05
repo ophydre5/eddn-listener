@@ -9,6 +9,13 @@ import simplejson
 import sys, os, datetime, time
 from jsonschema import validate
 import re
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.dialects import postgresql
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, Integer, text
+from sqlalchemy.sql.sqltypes import TIMESTAMP
+from sqlalchemy.dialects.postgresql.json import JSON, JSONB
 
 """
  "  Configuration
@@ -23,7 +30,15 @@ __debugEDDN       = False
 __logVerboseFile    = os.path.dirname(__file__) + '/Logs_Verbose_EDDN_%DATE%.htm'
 #__logVerboseFile    = False
 
+###########################################################################
+# Database
+###########################################################################
+__databaseURL       = 'postgresql://eddnlistener:6gQXLmMsA2guVjEGntYJe58V7VGT6MsL@localhost:5433/eddn';
+###########################################################################
+
+###########################################################################
 # List of blacklisted softwares
+###########################################################################
 __blacklistedSoftwares   = [
   'ed-ibe (api)',
   'ed central production server',
@@ -32,8 +47,11 @@ __blacklistedSoftwares   = [
   'ocellus - elite: dangerous assistant'
 # and eddi <= 2.2
 ]
+###########################################################################
 
+###########################################################################
 # Schemas we know about, so are interested in
+###########################################################################
 __knownSchemas = {
   "blackmarket":
     {
@@ -66,6 +84,7 @@ __knownSchemas = {
       "schema" : None
     }
 }
+###########################################################################
 
 """
  "  Start
@@ -101,8 +120,22 @@ def echoLog(__str):
     f.write(__str + '\n')
     f.close()
   
+Base = declarative_base()
+class Message(Base):
+  __tablename__ = 'messages'
+
+  id = Column(Integer, autoincrement=True, primary_key=True)
+  received = Column(TIMESTAMP, nullable=False, server_default=text('NOW()'), index=True)
+  message_raw = Column(JSON)
+  message = Column(JSONB)
+
 
 def main():
+  echoLog('Initialising Database Connection')
+  db_engine = create_engine(__databaseURL);
+  Base.metadata.create_all(db_engine)
+  Session = sessionmaker(bind=db_engine)
+
   echoLog('Starting EDDN Subscriber')
   echoLog('')
   
@@ -185,6 +218,16 @@ def main():
           continue
         except ValidationError as e:
           echoLog("Message failed to validate against schema")
+        ###############################################################
+
+        ###############################################################
+        # Insert data into database
+        ###############################################################
+        echoLog(__json)
+        db_msg = Message(message_raw=__json, message=__json)
+        session = Session()
+        session.add(db_msg)
+        session.commit()
         ###############################################################
 
     except zmq.ZMQError as e:
