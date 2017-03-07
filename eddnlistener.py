@@ -6,9 +6,12 @@
 import sys, os
 import logging
 import argparse
+import json
 
 import zlib
 import zmq
+
+from distutils.version import LooseVersion
 
 import simplejson
 from jsonschema import validate
@@ -32,22 +35,11 @@ __timeoutEDDN       = 600000
 __debugEDDN       = False
 
 ###########################################################################
-# Database
+# Configuration
 ###########################################################################
-__databaseURL       = 'postgresql://eddnlistener:6gQXLmMsA2guVjEGntYJe58V7VGT6MsL@localhost:5433/eddn';
-###########################################################################
-
-###########################################################################
-# List of blacklisted softwares
-###########################################################################
-__blacklistedSoftwares   = [
-  'ed-ibe (api)',
-  'ed central production server',
-  'eliteocr',
-  'regulatednoise__dj',
-  'ocellus - elite: dangerous assistant'
-# and eddi <= 2.2
-]
+configfile_fd = os.open("eddnlistener-config.json", os.O_RDONLY)
+configfile = os.fdopen(configfile_fd)
+__config = json.load(configfile)
 ###########################################################################
 
 ###########################################################################
@@ -134,7 +126,7 @@ if args.loglevel:
 
 def main():
   logger.info('Initialising Database Connection')
-  db_engine = create_engine(__databaseURL);
+  db_engine = create_engine(__config['database']['url'])
   Base.metadata.create_all(db_engine)
   Session = sessionmaker(bind=db_engine)
 
@@ -222,9 +214,22 @@ def main():
         # Check against blacklist
         ###############################################################
         blackListed = False
-        if __json['header']['softwareName'] in __blacklistedSoftwares:
-          blackListed = True
-          logger.info("Blacklisted softwareName: " + __json['header']['softwareName'])
+        logger.debug('Checking softwareName: ' + __json['header']['softwareName'])
+        for b in __config['blacklist']:
+          logger.debug('Checking softwareName against' + b.get('softwarename'))
+          if __json['header']['softwareName'].lower() == b.get('softwarename').lower():
+            logger.debug('Matching softwareName found, checking if we have version preference')
+            if b.get('goodversion'):
+              logger.debug('We have known good version of: ' + b.get('goodversion'))
+              if LooseVersion(__json['header']['softwareVersion']) < LooseVersion(b.get('goodversion')):
+                logger.debug(__json['header']['softwareVersion'] + ' < ' + b.get('goodversion'))
+                blackListed = True
+            else:
+              blackListed = True
+
+          if blackListed == True:
+            logger.info("Blacklisted softwareName: " + __json['header']['softwareName'])
+            break
         ###############################################################
 
         ###############################################################
