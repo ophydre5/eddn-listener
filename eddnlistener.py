@@ -42,43 +42,6 @@ configfile = os.fdopen(configfile_fd)
 __config = json.load(configfile)
 ###########################################################################
 
-###########################################################################
-# Schemas we know about, so are interested in
-###########################################################################
-__knownSchemas = {
-  "blackmarket":
-    {
-      "message_schema" : "http://schemas.elite-markets.net/eddn/blackmarket/1",
-      "local_schema" : "blackmarket-01.json",
-      "schema" : None
-    }
-  ,"commodity":
-    {
-      "message_schema" : "http://schemas.elite-markets.net/eddn/commodity/3",
-      "local_schema" : "commodity-03.json",
-      "schema" : None
-    }
-  ,"journal":
-    {
-      "message_schema" : "http://schemas.elite-markets.net/eddn/journal/1",
-      "local_schema" : "journal-01.json",
-      "schema" : None
-    }
-  ,"outfitting":
-    {
-      "message_schema" : "http://schemas.elite-markets.net/eddn/outfitting/2",
-      "local_schema" : "outfitting-02.json",
-      "schema" : None
-    }
-  ,"shipyard":
-    {
-      "message_schema" : "http://schemas.elite-markets.net/eddn/shipyard/2",
-      "local_schema" : "shipyard-02.json",
-      "schema" : None
-    }
-}
-###########################################################################
-
 """
  "  Start
 """
@@ -181,16 +144,21 @@ def main():
           logger.warning("Couldn't find 'part' in $schemaRef" + __json['$schemaRef'])
           continue
 
-        if not __schema.group('part') in __knownSchemas:
+        __knownSchema = False
+        for s in __config['schemas']:
+          if __schema.group('part') == s.get('name'):
+            __knownSchema = True
+            schemainfo = s
+            break
+        if not __knownSchema:
           logger.warning("Unknown schema: " + __json['$schemaRef'])
           continue
 
-        schemainfo = __knownSchemas[__schema.group('part')]
         if not schemainfo['message_schema'] == __json['$schemaRef']:
           logger.warning("In-message %schemaRef (" + __json['$schemaRef'] + ") doesn't precisely match expected schemaRef (" + schemainfo['message_schema'] + ")")
           continue
 
-        if not schemainfo['schema']:
+        if not schemainfo.get('schema'):
           logger.debug("Schema '" + __schema.group('part') + "' not yet loaded, doing so...")
           filename = "schemas/" + schemainfo['local_schema']
           schema_fd = open(filename, 'rt')
