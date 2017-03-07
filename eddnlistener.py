@@ -184,19 +184,20 @@ def main():
         blackListed = False
         logger.debug('Checking softwareName: ' + __json['header']['softwareName'])
         for b in __config['blacklist']:
-          logger.debug('Checking softwareName against' + b.get('softwarename'))
+          #logger.debug('Checking softwareName against' + b.get('softwarename'))
           if __json['header']['softwareName'].lower() == b.get('softwarename').lower():
-            logger.debug('Matching softwareName found, checking if we have version preference')
+            #logger.debug('Matching softwareName "' + b.get('softwarename') + '"found, checking if we have version preference')
             if b.get('goodversion'):
-              logger.debug('We have known good version of: ' + b.get('goodversion'))
+              #logger.debug('We have known good version of: ' + b.get('goodversion'))
               if LooseVersion(__json['header']['softwareVersion']) < LooseVersion(b.get('goodversion')):
-                logger.debug(__json['header']['softwareVersion'] + ' < ' + b.get('goodversion'))
+                logger.debug('Blacklisted as ' + __json['header']['softwareVersion'] + ' < ' + b.get('goodversion'))
                 blackListed = True
             else:
+              logger.debug('Blacklisted ALL versions')
               blackListed = True
 
           if blackListed == True:
-            logger.info("Blacklisted softwareName: " + __json['header']['softwareName'])
+            logger.info('Blacklisted ' + __json['header']['softwareName'] + '(' + __json['header']['softwareVersion'] + ')')
             break
         ###############################################################
 
