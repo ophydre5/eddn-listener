@@ -15,13 +15,14 @@ class database(object):
     Base.metadata.create_all(db_engine)
     self.Session = sessionmaker(bind=db_engine)
 
-  def insertMessage(self, json, blacklisted, message_valid):
+  def insertMessage(self, json, blacklisted, message_valid, schema_test):
     try:  
       db_msg = Message(
-        message_raw=json,
-        message=json,
-        blacklisted=blacklisted,
-        message_valid = message_valid
+        message_raw = json,
+        message = json,
+        blacklisted = blacklisted,
+        message_valid = message_valid,
+        schema_test = schema_test
       )
       session = self.Session()
       session.add(db_msg)
@@ -36,14 +37,15 @@ class database(object):
 Base = declarative_base()
 
 class Message(Base):
-  __tablename__ = 'messages'
+  __tablename__ = "messages"
 
   id = Column(Integer, autoincrement=True, primary_key=True)
-  received = Column(TIMESTAMP, nullable=False, server_default=text('NOW()'), index=True)
+  received = Column(TIMESTAMP, nullable=False, server_default=text("NOW()"), index=True)
   message_raw = Column(JSON)
   message = Column(JSONB)
   blacklisted = Column(Boolean)
   message_valid = Column(Boolean)
+  schema_test = Column(Boolean)
 ###########################################################################
 
 ###########################################################################
@@ -66,7 +68,7 @@ class EddnDatabaseTests(unittest.TestCase):
     configfile.close()
 
     try:
-      self.db = database(__config['database']['url'])
+      self.db = database(__config["database"]["url"])
     except OperationalError:
       self.skipTest("Failed to connect to database")
 

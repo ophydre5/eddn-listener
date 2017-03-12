@@ -117,11 +117,12 @@ def main():
           name, version = Ex.args
           logger.info("Blacklisted " + name + " (" + version + ")")
           __message_blacklisted = True
+        __message_schema_is_test = eddn_message.schema_is_test
 
         ###############################################################
         # Insert data into database
         ###############################################################
-        db.insertMessage(eddn_message.json, __message_blacklisted, __message_valid)
+        db.insertMessage(eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
         ###############################################################
 
     except zmq.ZMQError as e:

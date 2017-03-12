@@ -4,7 +4,17 @@ from jsonschema import validate
 from distutils.version import LooseVersion
 
 class message:
+  """
+  Class that handles parsing of a message as JSON and then validating it.
+  """
   def __init__(self, message, config, logger):
+    """
+    Accepts the raw text of a JSON message, a config object and a logger
+    object.
+
+    Will raise a JSONParseError exception if the message can't be parsed as
+    JSON.
+    """
     self.config = config
     self.logger = logger
     try: 
@@ -17,7 +27,16 @@ class message:
       raise
 
   def validate(self):
-    """ Validate message against relevant schema """
+    """
+    Validates a message against relevant schema, and checks if the software
+    name/version are on the blacklist.
+
+    Sets member schema_is_test = True if a test schema is detected.
+
+    Raises JSONValidationFailed with a reason (in string message) if the
+    message doesn't validate for any reason.
+    Raises SoftwareBlacklisted if the software Name, or version, is on the blacklist.
+    """
     if not "$schemaRef" in self.json:
       raise JSONValidationFailed("Message doesn't have a $schemaRef")
 
@@ -37,9 +56,12 @@ class message:
     if not __knownSchema:
       raise JSONValidationFailed("Unknown schema: " + self.json["$schemaRef"])
 
-# XXX: Handle 'test' schemas
-    if not schemainfo["message_schema"] == self.json["$schemaRef"]:
-      raise JSONValidationFailed("In-message %schemaRef (" + self.json["$schemaRef"] + ") doesn't precisely match expected schemaRef (" + schemainfo["message_schema"] + ")")
+    self.schema_is_test = False
+    if re.match(schemainfo["message_schema"], self.json["$schemaRef"]):
+      if re.search('[0-9]+/test$', self.json["$schemaRef"]):
+        self.schema_is_test = True
+    else:
+      raise JSONValidationFailed("In-message $schemaRef (" + self.json["$schemaRef"] + ") doesn't match expected schemaRef (" + schemainfo["message_schema"] + ")")
 
     if not schemainfo.get("schema"):
       self.logger.debug("Schema '" + __schema.group("part") + "' not yet loaded, doing so...")
@@ -79,6 +101,9 @@ class Error(Exception):
   pass
 
 class JSONParseError(Error):
+  """
+  Exception raised when a message couldn't be parsed as JSON.
+  """
   def __init__(self, expression, message):
     self.expression = expression
     self.message = message
@@ -91,3 +116,19 @@ class SoftwareBlacklisted(Error):
   def __init__(self, softwareName, softwareVersion):
     self.softwareName = softwareName
     self.softwareVersion = softwareVersion
+
+###########################################################################
+# Tests
+###########################################################################
+# XXX: Invalid JSON
+# XXX: No $schemaRef
+# XXX: $schemaRef did not match regex
+# XXX: Couldn't find 'part' in $schemaRef
+# XXX: Unknown schema
+# XXX: schema_is_test
+# XXX: In-message $schemaRef doesn't match expected schemaRef
+# XXX: foreach schema: Schema fails to load
+# XXX: foreach schema: Message validates against schema
+# XXX: Blacklisted softwareName - all versions
+# XXX: Blacklisted softwareName - only older than goodVersion
+###########################################################################
