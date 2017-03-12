@@ -17,13 +17,7 @@ import simplejson
 from jsonschema import validate
 import re
 
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.dialects import postgresql
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, Integer, text
-from sqlalchemy.sql.sqltypes import TIMESTAMP
-from sqlalchemy.dialects.postgresql.json import JSON, JSONB
+import eddn
 
 """
  "  Configuration
@@ -45,19 +39,6 @@ __config = json.load(configfile)
 """
  "  Start
 """
-
-###########################################################################
-# Setup SQLAlchemy-related classes/data
-###########################################################################
-Base = declarative_base()
-class Message(Base):
-  __tablename__ = 'messages'
-
-  id = Column(Integer, autoincrement=True, primary_key=True)
-  received = Column(TIMESTAMP, nullable=False, server_default=text('NOW()'), index=True)
-  message_raw = Column(JSON)
-  message = Column(JSONB)
-###########################################################################
 
 ###########################################################################
 # Logging
@@ -89,9 +70,7 @@ if args.loglevel:
 
 def main():
   logger.info('Initialising Database Connection')
-  db_engine = create_engine(__config['database']['url'])
-  Base.metadata.create_all(db_engine)
-  Session = sessionmaker(bind=db_engine)
+  db = eddn.database(__config['database']['url'])
 
   logger.info('Starting EDDN Subscriber')
   
@@ -204,10 +183,7 @@ def main():
         ###############################################################
         # Insert data into database
         ###############################################################
-        db_msg = Message(message_raw=__json, message=__json)
-        session = Session()
-        session.add(db_msg)
-        session.commit()
+        db.insertMessage(__json)
         ###############################################################
 
     except zmq.ZMQError as e:
