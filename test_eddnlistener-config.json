@@ -1,7 +1,7 @@
 {
 	"database":
 	{
-		"url":"postgresql://eddnlistener:CzblnkXQopArYfNTGa8lE4Q59QXOJ2hlwQKJx99EIcP1Dj3yfmud1Tt8xFhK1b95Y3LutWP8gCrgw1Siqutu6HTPgYDqowxzc1ecV2J1164uLGX6m7ckCJRcajn8yBnX@localhost:5433/eddn"
+		"url":"postgresql://eddnlistener_test:G9qfXlPCohjw9YrSjE1vCaaBsO9zqT6tQD6JE2Qqf6chVrHweFTfKDhb9g0ntfjAQogsICWjFsfFjozT9XXXS0V73kP6ynqsUKes8TwHwNFupcGNSEhmB5ffuGcE21Xb@localhost:5433/eddn_test"
 	},
 	"blacklist":
 	[

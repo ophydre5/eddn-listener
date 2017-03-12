@@ -1,4 +1,4 @@
-from message import message, JSONParseError, JSONValidationFailed, SoftwareBlacklisted
+from eddn.message.message import message, JSONParseError, JSONValidationFailed, SoftwareBlacklisted
 import simplejson
 from jsonschema import validate, ValidationError
 
@@ -13,7 +13,7 @@ class EddnMessageTests(unittest.TestCase):
     try:
       configfile_fd = os.open("test_eddnlistener-config.json", os.O_RDONLY)
     except (FileNotFoundError):
-      self.skipTest("No schemas config due to eddnlistener-config.json not found") 
+      self.skipTest("No schemas config due to test_eddnlistener-config.json not found") 
 
     configfile = os.fdopen(configfile_fd)
     self.config = json.load(configfile)
