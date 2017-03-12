@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, Integer, text
+from sqlalchemy import Column, Integer, text, Boolean
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.dialects.postgresql.json import JSON, JSONB
 
@@ -15,9 +15,14 @@ class database(object):
     Base.metadata.create_all(db_engine)
     self.Session = sessionmaker(bind=db_engine)
 
-  def insertMessage(self, json):
+  def insertMessage(self, json, blacklisted, message_valid):
     try:  
-      db_msg = Message(message_raw=json, message=json)
+      db_msg = Message(
+        message_raw=json,
+        message=json,
+        blacklisted=blacklisted,
+        message_valid = message_valid
+      )
       session = self.Session()
       session.add(db_msg)
       session.commit()
@@ -37,6 +42,8 @@ class Message(Base):
   received = Column(TIMESTAMP, nullable=False, server_default=text('NOW()'), index=True)
   message_raw = Column(JSON)
   message = Column(JSONB)
+  blacklisted = Column(Boolean)
+  message_valid = Column(Boolean)
 ###########################################################################
 
 ###########################################################################
