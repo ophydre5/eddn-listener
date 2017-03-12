@@ -1,6 +1,6 @@
 import simplejson
 import re
-from jsonschema import validate
+from jsonschema import validate, SchemaError
 from distutils.version import LooseVersion
 
 class message:
@@ -44,9 +44,6 @@ class message:
     if not __schema:
       raise JSONValidationFailed("$schemaRef did not match regex: " + self.json["$schemaRef"])
 
-    if not __schema.group("part"):
-      raise JSONValidationFailed("Couldn't find 'part' in $schemaRef" + self.json["$schemaRef"])
-
     __knownSchema = False
     for s in self.config["schemas"]:
       if __schema.group("part") == s.get("name"):
@@ -68,8 +65,8 @@ class message:
       filename = "schemas/" + schemainfo["local_schema"]
       schema_fd = open(filename, "rt")
       schema_str = schema_fd.read(None)
-      schemainfo["schema"] = simplejson.loads(schema_str)
       schema_fd.close()
+      schemainfo["schema"] = simplejson.loads(schema_str)
       #self.logger.debug("loaded schema: " + schemainfo["schema"])
 
     try:
@@ -117,18 +114,3 @@ class SoftwareBlacklisted(Error):
     self.softwareName = softwareName
     self.softwareVersion = softwareVersion
 
-###########################################################################
-# Tests
-###########################################################################
-# XXX: Invalid JSON
-# XXX: No $schemaRef
-# XXX: $schemaRef did not match regex
-# XXX: Couldn't find 'part' in $schemaRef
-# XXX: Unknown schema
-# XXX: schema_is_test
-# XXX: In-message $schemaRef doesn't match expected schemaRef
-# XXX: foreach schema: Schema fails to load
-# XXX: foreach schema: Message validates against schema
-# XXX: Blacklisted softwareName - all versions
-# XXX: Blacklisted softwareName - only older than goodVersion
-###########################################################################

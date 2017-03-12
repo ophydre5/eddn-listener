@@ -1,0 +1,72 @@
+{
+	"database":
+	{
+		"url":"postgresql://eddnlistener:CzblnkXQopArYfNTGa8lE4Q59QXOJ2hlwQKJx99EIcP1Dj3yfmud1Tt8xFhK1b95Y3LutWP8gCrgw1Siqutu6HTPgYDqowxzc1ecV2J1164uLGX6m7ckCJRcajn8yBnX@localhost:5433/eddn"
+	},
+	"blacklist":
+	[
+		{
+			"softwarename":"Test Bad SoftwareName"
+		},
+		{
+			"softwarename":"Test Bad SoftwareVersion",
+			"goodversion":"42.0"
+		},
+		{
+			"softwarename":"ed-ibe (api)"
+		},
+		{
+			"softwarename":"ed central production server"
+		},
+		{
+			"softwarename":"eliteocr"
+		},
+		{
+			"softwarename":"regulatednoise__dj"
+		},
+		{
+			"softwarename":"ocellus - elite: dangerous assistant"
+		},
+		{
+			"softwarename":"eddi"
+		}
+	],
+	"schemas":
+	[
+		{
+			"name":"blackmarket",
+			"message_schema":"http://schemas.elite-markets.net/eddn/blackmarket/1",
+			"local_schema":"blackmarket-01.json"
+		},
+		{
+			"name":"commodity",
+			"message_schema":"http://schemas.elite-markets.net/eddn/commodity/3",
+			"local_schema":"commodity-03.json"
+		},
+		{
+			"name":"journal",
+			"message_schema":"http://schemas.elite-markets.net/eddn/journal/1",
+			"local_schema":"journal-01.json"
+		},
+		{
+			"name":"outfitting",
+			"message_schema":"http://schemas.elite-markets.net/eddn/outfitting/2",
+			"local_schema":"outfitting-02.json"
+		},
+		{
+			"name":"shipyard",
+			"message_schema":"http://schemas.elite-markets.net/eddn/shipyard/2",
+			"local_schema":"shipyard-02.json"
+		},
+		{
+			"name":"python_tests",
+			"message_schema":"http://schemas.elite-markets.net/eddn/python_tests/1",
+			"local_schema":"python_tests-01.json"
+		},
+		{
+			"name":"python_tests_02",
+			"message_schema":"http://schemas.elite-markets.net/eddn/python_tests_02/2",
+			"local_schema":"python_tests-02.json"
+		}
+	]
+}

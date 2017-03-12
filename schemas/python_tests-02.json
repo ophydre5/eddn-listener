@@ -1,0 +1,36 @@
+{
+    "$schema"               : "http://json-schema.org/draft-04/schema#",
+    "id"                    : "http://schemas.elite-markets.net/eddn/journal/1#",
+    "type"                  : "object",
+    "additionalProperties  : false,
+    "required": [ "$schemaRef", "header", "message" ],
+    "properties": {
+        "$schemaRef": {
+            "type"                  : "string"
+        },
+        "header": {
+            "type"                  : "object",
+            "additionalProperties"  : true,
+            "required"              : [ "uploaderID", "softwareName", "softwareVersion" ],
+            "properties"            : {
+                "uploaderID": {
+                    "type"          : "string"
+                },
+                "softwareName": {
+                    "type"          : "string"
+                },
+                "softwareVersion": {
+                    "type"          : "string"
+                },
+                "gatewayTimestamp": {
+                    "type"          : "string",
+                    "format"        : "date-time",
+                    "description"   : "Timestamp upon receipt at the gateway. If present, this property will be overwritten by the gateway; submitters are not intended to populate this property."
+                }
+            }
+        }
+    },
+    "definitions": {
+        "disallowed" : { "not" : { "type": [ "array", "boolean", "integer", "number", "null", "object", "string" ] } }
+    }
+}
