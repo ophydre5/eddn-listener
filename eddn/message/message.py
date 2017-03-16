@@ -77,17 +77,21 @@ class message:
 
     try:
       __blackListed = False
-      self.logger.debug("Checking softwareName: " + self.json["header"]["softwareName"])
+      self.logger.debug("Checking softwareName: " + self.json["header"]["softwareName"] + " (" + self.json["header"]["softwareVersion"] + ")")
       b = list(filter(lambda x: x.get("softwarename").lower() == self.json["header"]["softwareName"].lower(), self.config["blacklist"]))
       if len(b) > 0:
         s = b.pop()
         self.logger.debug("Matching softwareName '" + s.get("softwarename") + "' found, checking if we have version preference")
-        if s.get("goodversion") and LooseVersion(self.json["header"]["softwareVersion"]) < LooseVersion(s.get("goodversion")):
-          self.logger.debug("Blacklisted as " + self.json["header"]["softwareVersion"] + " < " + s.get("goodversion"))
-          __blackListed = True
-        else:
-          self.logger.debug("Blacklisted ALL versions")
-          __blackListed = True
+        if s.get("goodversion"):
+          self.logger.debug("\tWe have a version preference: " + self.json["header"]["softwareVersion"])
+          if LooseVersion(self.json["header"]["softwareVersion"]) < LooseVersion(s.get("goodversion")):
+            self.logger.debug("\tBlacklisted as " + self.json["header"]["softwareVersion"] + " < " + s.get("goodversion"))
+            __blackListed = True
+          else:
+            self.logger.debug("\tNOT Blacklisted as " + self.json["header"]["softwareVersion"] + " >= " + s.get("goodversion"))
+      else:
+        self.logger.debug("\tBlacklisted ALL versions")
+        __blackListed = True
 
       if __blackListed == True:
         raise SoftwareBlacklisted(self.json["header"]["softwareName"], self.json["header"]["softwareVersion"])
