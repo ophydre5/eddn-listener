@@ -54,8 +54,11 @@ class message:
       raise JSONValidationFailed("Unknown schema: " + self.json["$schemaRef"])
 
     self.schema_is_test = False
+    self.logger.debug("Checking message_schema '" + schemainfo["message_schema"] + "' against '" + self.json["$schemaRef"] + "'")
     if re.match(schemainfo["message_schema"], self.json["$schemaRef"]):
+      self.logger.debug("Checking for test schema in: " + self.json["$schemaRef"])
       if re.search('[0-9]+/test$', self.json["$schemaRef"]):
+        self.logger.debug("\tSchema is a test one")
         self.schema_is_test = True
     else:
       raise JSONValidationFailed("In-message $schemaRef (" + self.json["$schemaRef"] + ") doesn't match expected schemaRef (" + schemainfo["message_schema"] + ")")
@@ -89,9 +92,9 @@ class message:
             __blackListed = True
           else:
             self.logger.debug("\tNOT Blacklisted as " + self.json["header"]["softwareVersion"] + " >= " + s.get("goodversion"))
-      else:
-        self.logger.debug("\tBlacklisted ALL versions")
-        __blackListed = True
+        else:
+          self.logger.debug("\tBlacklisted ALL versions")
+          __blackListed = True
 
       if __blackListed == True:
         raise SoftwareBlacklisted(self.json["header"]["softwareName"], self.json["header"]["softwareVersion"])

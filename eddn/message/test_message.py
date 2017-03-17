@@ -47,7 +47,6 @@ class EddnMessageTests(unittest.TestCase):
   ############################################################
   def test_noSchemaRef(self):
     m = message(
-      #'{"message": {"event": "Docked"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/journal/1/test"}',
       '{"message": {"event": "Docked"}}',
       self.config, self.logger)    
     with self.assertRaises(JSONValidationFailed):
@@ -141,6 +140,19 @@ class EddnMessageTests(unittest.TestCase):
       self.config, self.logger)    
     with self.assertRaises(ValidationError):
       m.validate()
+	############################################################
+
+	############################################################
+	# Good softwareName NOT blacklisted
+	############################################################
+  def test_blacklistedGoodSoftwareNameAllowed(self):
+    m = message(
+      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good SoftwareName", "softwareVersion": "0.6.1", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/journal/1"}',
+      self.config, self.logger)
+    try:
+      m.validate()
+    except SoftwareBlacklisted:
+      self.fail("'Test Good SoftwareName' raised SoftwareBlacklisted")
 	############################################################
 
 	############################################################
