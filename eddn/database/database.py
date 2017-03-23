@@ -29,6 +29,11 @@ class database(object):
       session.commit()
     except:
       raise
+
+  def latestMessageTimestamp(self):
+    session = self.Session()
+    for r in session.query(Message.message).order_by(Message.id.desc()).limit(1):
+      return r.message['header']['gatewayTimestamp']
 ###########################################################################
 
 ###########################################################################
@@ -45,5 +50,4 @@ class Message(Base):
   message = Column(JSONB)
   blacklisted = Column(Boolean)
   message_valid = Column(Boolean)
-  schema_test = Column(Boolean)
 ###########################################################################
