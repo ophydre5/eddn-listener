@@ -119,6 +119,9 @@ def main():
           __threads = []
           __threads.append(__eddnarchive_thread)
           __eddnarchive_thread.start()
+          # For testing when we want only the separate thread running
+          #__eddnarchive_thread.join()
+          #exit(0)
           __first = False
 
         __db.insertMessage(__eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
@@ -168,12 +171,26 @@ def validateEDDNMessage(msg):
 def eddnarchiveThread(__db, __endgatewayTimestamp):
   __logger.info("First message, checking eddn-archive...")
   __archive = eddn.archive(__config, __logger)
-  __archive_data = __archive.getTimeRange(__db.latestMessageTimestamp(), __endgatewayTimestamp)
-  #print(__archive_data)
-  for m in __archive_data:
-    #print(type(m))
-    (__eddn_message, __message_valid, __message_blacklisted, __message_schema_is_test) = validateEDDNMessage(m)
-    __db.insertMessage(__eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
+
+  ############################################################################
+  for a in __config['eddnarchive']['archivetypes']:
+    for v in a.values():
+      __latestMessageTimestamp = __db.latestMessageTimestamp(v)
+    ##########################################################################
+    for k in a.keys():
+      __logger.info("Current latest gatewayTimeStamp for %s is %s", k, __latestMessageTimestamp)
+      __archive_data = __archive.getTimeRange(k, __latestMessageTimestamp, __endgatewayTimestamp)
+      #print(__archive_data)
+      ########################################################################
+      for m in __archive_data:
+        #print(type(m))
+        (__eddn_message, __message_valid, __message_blacklisted, __message_schema_is_test) = validateEDDNMessage(m)
+# XXX: The database insert will move into eddn.archive.requestData
+        __db.insertMessage(__eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
+        __logger.info("Inserted message with gatewayTimeStamp: %s", __eddn_message.json['header']['gatewayTimestamp'])
+      ########################################################################
+    ##########################################################################
+  ############################################################################
 
   __logger.info("Backfill from EDDN Archive finished")
 ##############################################################################

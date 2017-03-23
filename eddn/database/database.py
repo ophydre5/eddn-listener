@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import sessionmaker
@@ -30,9 +30,12 @@ class database(object):
     except:
       raise
 
-  def latestMessageTimestamp(self):
+  def latestMessageTimestamp(self, archiveType):
     session = self.Session()
-    for r in session.query(Message.message).order_by(Message.id.desc()).limit(1):
+    gatewayTimestamp = Message.message[("header", "gatewayTimestamp")]
+    schema = Message.message[("$schemaRef")].astext
+    results = session.query(Message.message).filter(schema.like("%"+archiveType+"%")).filter(gatewayTimestamp != None).order_by(desc(gatewayTimestamp)).limit(1)
+    for r in results:
       return r.message['header']['gatewayTimestamp']
 ###########################################################################
 

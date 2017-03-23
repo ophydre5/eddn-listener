@@ -17,11 +17,13 @@ class archive:
 #############################################################################
 
 #############################################################################
-  def getTimeRange(self, start, end=None):
+  def getTimeRange(self, archive, start, end=None):
     self.__logger.debug("Starting")
+
     if not start:
       self.__logger.warn("No 'start', no data in database yet?")
       return []
+
     __startDateTime = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S.%fZ")
     if end:
       self.__logger.debug("Using supplied end timestamp")
@@ -31,6 +33,7 @@ class archive:
       __endOfDay = __startDateTime.strftime("%Y-%m-%dT23:59:59.999999Z")
       __endDateTime = datetime.strptime(__endOfDay, "%Y-%m-%dT%H:%M:%S.%fZ")
 
+    self.__logger.debug("%s (%d) to %s (%d)", __startDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"), __startDateTime.timestamp() * 1000000, __endDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"), __endDateTime.timestamp() * 1000000)
     __data = []
     __thisDate = __startDateTime.date()
     while __thisDate <= __endDateTime.date():
@@ -39,11 +42,10 @@ class archive:
       else:
         __endDate = __startDateTime + timedelta(1)
         __thisEndDateTime = datetime(__endDate.year, __endDate.month, __endDate.day)
-      self.__logger.debug("Loop for %s to %s", __startDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"), __thisEndDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
+      self.__logger.debug("For %s to %s", __startDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"), __thisEndDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
 
-      for a in self.__config['eddnarchive']['archivetypes']:
-        self.__logger.debug("Loop for archive type '%s'", a)
-        __data.extend(self.requestData("blackmarkets", __startDateTime.strftime('%Y-%m-%d'), __startDateTime.timestamp() * 1000000 + 1, __endDateTime.timestamp() * 1000000))
+      self.__logger.debug("Archive type '%s'", archive)
+      __data.extend(self.requestData(archive, __startDateTime.strftime('%Y-%m-%d'), __startDateTime.timestamp() * 1000000 + 1, __endDateTime.timestamp() * 1000000))
 
       __thisDate = __thisDate + timedelta(1)
       __startDateTime = datetime.fromordinal(__thisDate.toordinal())
@@ -61,11 +63,11 @@ class archive:
     __url = self.__config["eddnarchive"]["baseurl"] + archivetype + "/" + date
     __headers = {"x-api-key":self.__config['eddnarchive']['apikey']}
     __limit = 500
-    __backoff_sleep_start = self.__config['eddnarchive']['backoff']['basesleep']
-    __backoff_sleep_multi = self.__config['eddnarchive']['backoff']['multiplier']
-    __backoff_sleep_jitter = self.__config['eddnarchive']['backoff']['jitter']
-    __backoff_sleep = __backoff_sleep_start
-    __backoff_sleep_interquery = __backoff_sleep_start
+    self.__backoff_sleep_start = self.__config['eddnarchive']['backoff']['basesleep']
+    self.__backoff_sleep_multi = self.__config['eddnarchive']['backoff']['multiplier']
+    self.__backoff_sleep_jitter = self.__config['eddnarchive']['backoff']['jitter']
+    self.__backoff_sleep = self.__backoff_sleep_start
+    self.__backoff_sleep_interquery = self.__backoff_sleep_start
     __params = {
       "limit": __limit,
       "from": _from,
@@ -76,29 +78,38 @@ class archive:
       __params['nexttimestamp'] = nexttimestamp
     __data = []
     #################################################################
-    while True:
+    __done = False
+    while not __done:
       __params['limit'] = __limit
       self.__logger.debug("Requesting: '%s' with params: %s", __url, __params)
       try:
+        self.__logger.debug("url = '%s', params = %s", __url, str(__params))
         __response = requests.get(__url, params=__params, headers=__headers, timeout=60.0)
         __json = __response.json()
         if __response.status_code != 200:
           if __json['message'] == 'body size is too long':
             __limit = max(1, __limit - 5)
-          backoffSleep(__json['message'])
+            self.__logger.info("Got '%s', limit is now %d", __json['message'], __limit)
+            sleep(self.__backoff_sleep_interquery)
+          else:
+            self.backoffSleep(__json['message'])
         elif __json.get('__type') and __json['__type'] == "" and __json.get('message') and re.match("^RequestId: [0-9a-f]+ Process exited before completing request", __json['message']):
-          backoffSleep(__json['message'])
+          self.backoffSleep(__json['message'])
         else:
           #print(__response.json())
+          self.__logger.debug("Got a valid response")
+# XXX: Need to insert into the database here
           __data.extend(__json['Items'])
           if __json.get('LastEvaluatedTimestamp'):
+            self.__logger.info("Which had a LastEvaluatedTimestamp(%s), so setting nexttimestamp", __json['LastEvaluatedTimestamp'])
             __params['nexttimestamp'] = __json['LastEvaluatedTimestamp']
-            sleep(__backoff_sleep_interquery)
+            sleep(self.__backoff_sleep_interquery)
           else:
+            __done = True
             break
       except ConnectionError as Ex:
-        self.__logger.error(__main__ + ": Connection Error")
-        backoffSleep("Connection Error")
+        self.__logger.error("Connection Error")
+        self.backoffSleep("Connection Error")
       except HTTPError as Ex:
         self.__logger.error(__main__ + ": HTTPError")
       except Timeout as Ex:
@@ -112,15 +123,15 @@ class archive:
 #############################################################################
 
 #############################################################################
-  def backoffSleep(msg=None):
-    if __backoff_sleep < __backoff_sleep_start:
-      self.__logger.error("Erk, backoff_sleep now %f - how did that happen?", __backoff_sleep)
+  def backoffSleep(self, msg=None):
+    if self.__backoff_sleep < self.__backoff_sleep_start:
+      self.__logger.error("Erk, backoff_sleep now %f - how did that happen?", self.__backoff_sleep)
       return
-    self.__logger.info("Encountered error '%s', sleeping for %f seconds...", msg, __backoff_sleep)
-    sleep(__backoff_sleep)
-    __backoff_sleep = max(
-      __backoff_sleep_start * __backoff_sleep_multi,
-      __backoff_sleep * __backoff_sleep_multi + randint(-1 * __backoff_sleep_jitter, __backoff_sleep_jitter)
+    self.__logger.info("Encountered error '%s', sleeping for %f seconds...", msg, self.__backoff_sleep)
+    sleep(self.__backoff_sleep)
+    self.__backoff_sleep = max(
+      self.__backoff_sleep_start * self.__backoff_sleep_multi,
+      self.__backoff_sleep * self.__backoff_sleep_multi + randint(-1 * self.__backoff_sleep_jitter, self.__backoff_sleep_jitter)
     )
-    __backoff_sleep_interquery += 1
+    self.__backoff_sleep_interquery += 1
 #############################################################################
