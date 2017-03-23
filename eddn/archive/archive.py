@@ -40,9 +40,11 @@ class archive:
         __endDate = __startDateTime + timedelta(1)
         __thisEndDateTime = datetime(__endDate.year, __endDate.month, __endDate.day)
       self.__logger.debug("Loop for %s to %s", __startDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"), __thisEndDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
+
       for a in self.__config['eddnarchive']['archivetypes']:
         self.__logger.debug("Loop for archive type '%s'", a)
         __data.extend(self.requestData("blackmarkets", __startDateTime.strftime('%Y-%m-%d'), __startDateTime.timestamp() * 1000000 + 1, __endDateTime.timestamp() * 1000000))
+
       __thisDate = __thisDate + timedelta(1)
       __startDateTime = datetime.fromordinal(__thisDate.toordinal())
 

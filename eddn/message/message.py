@@ -17,14 +17,19 @@ class message:
     """
     self.config = config
     self.logger = logger
-    try: 
-      self.json = simplejson.loads(message)
-      if not self.json:
-        raise JSONParseError(message, "Failed to parse message as json")
-    except Exception as ex:
-      #print(type(ex))
-      #print(ex.args)
-      raise
+    if type(message) is bytes:
+      try: 
+        self.json = simplejson.loads(message)
+        if not self.json:
+          raise JSONParseError(message, "Failed to parse message as json")
+      except Exception as ex:
+        #print(type(ex))
+        #print(ex.args)
+        raise
+    elif type(message) is dict:
+      self.json = message
+    else:
+      raise JSONParseError(message, "message neither bytes nor dict: " + str(type(message)))
 
   def validate(self):
     """

@@ -65,6 +65,7 @@ if __args.loglevel:
   __logger_ch.setLevel(__level)
 ###########################################################################
 
+##############################################################################
 def main():
   __logger.info('Initialising Database Connection')
   __db = eddn.database(__config['database']['url'])
@@ -78,12 +79,15 @@ def main():
 
 
   __logger.info('Starting EDDN Subscriber')
+  ############################################################################
   while True:
     __first = True
+    ##########################################################################
     try:
       __subscriber.connect(__relayEDDN)
       __logger.info('Connect to ' + __relayEDDN)
       
+      ########################################################################
       while True:
         __message   = __subscriber.recv()
         
@@ -99,29 +103,12 @@ def main():
           __logger.warning('Failed to decompress message')
           continue
 
-        try: 
-          __eddn_message = eddn.message(__message, __config, __logger)
-        except JSONParseError as Ex:
-          __json, __message = Ex.args
-          __logger.warning(__message)
-          continue
-        
         ###############################################################
         # Validate message against relevant schema and blacklist
         ###############################################################
-        __message_valid = True
-        __message_blacklisted = False
-        try:
-          __eddn_message.validate()
-        except JSONValidationFailed as Ex:
-          __logger.warning(Ex.args)
-          __message_valid = False
-          __message_blacklisted = None
-        except SoftwareBlacklisted as Ex:
-          name, version = Ex.args
-          __logger.info("Blacklisted " + name + " (" + version + ")")
-          __message_blacklisted = True
-        __message_schema_is_test = __eddn_message.schema_is_test
+        (__eddn_message, __message_valid, __message_blacklisted, __message_schema_is_test) = validateEDDNMessage(__message)
+        if not __eddn_message:
+          continue
 
         ###############################################################
         # Insert data into database
@@ -136,19 +123,60 @@ def main():
 
         __db.insertMessage(__eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
         ###############################################################
+      ########################################################################
 
     except zmq.ZMQError as e:
       __logger.error('ZMQSocketException: ' + str(e))
       __subscriber.disconnect(__relayEDDN)
       __logger.warning('Disconnect from ' + __relayEDDN)
       time.sleep(5)
+    ##########################################################################
+  ############################################################################
+##############################################################################
 
+##############################################################################
+def validateEDDNMessage(msg):
+  try: 
+    #print(msg)
+    __eddn_message = eddn.message(msg, __config, __logger)
+  except JSONParseError as Ex:
+    __json, __message = Ex.args
+    __logger.warning(__message)
+    return (None, None, None, None)
+  except TypeError as Ex:
+    __logger.error("Type Error\n%s", msg)
+    raise
+
+  __message_valid = True
+  __message_blacklisted = False
+  try:
+    __eddn_message.validate()
+  except JSONValidationFailed as Ex:
+    __logger.warning(Ex.args)
+    __message_valid = False
+    __message_blacklisted = None
+  except SoftwareBlacklisted as Ex:
+    name, version = Ex.args
+    __logger.info("Blacklisted " + name + " (" + version + ")")
+    __message_blacklisted = True
+  __message_schema_is_test = __eddn_message.schema_is_test
+  return (__eddn_message, __message_valid, __message_blacklisted, __message_schema_is_test)
+
+##############################################################################
+
+##############################################################################
 def eddnarchiveThread(__db, __endgatewayTimestamp):
   __logger.info("First message, checking eddn-archive...")
   __archive = eddn.archive(__config, __logger)
   __archive_data = __archive.getTimeRange(__db.latestMessageTimestamp(), __endgatewayTimestamp)
   #print(__archive_data)
-  
+  for m in __archive_data:
+    #print(type(m))
+    (__eddn_message, __message_valid, __message_blacklisted, __message_schema_is_test) = validateEDDNMessage(m)
+    __db.insertMessage(__eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
+
+  __logger.info("Backfill from EDDN Archive finished")
+##############################################################################
 
 if __name__ == '__main__':
   main()
