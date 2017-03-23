@@ -19,6 +19,9 @@ class archive:
 #############################################################################
   def getTimeRange(self, start, end=None):
     self.__logger.debug("Starting")
+    if not start:
+      self.__logger.warn("No 'start', no data in database yet?")
+      return []
     __startDateTime = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S.%fZ")
     if end:
       self.__logger.debug("Using supplied end timestamp")
@@ -28,6 +31,7 @@ class archive:
       __endOfDay = __startDateTime.strftime("%Y-%m-%dT23:59:59.999999Z")
       __endDateTime = datetime.strptime(__endOfDay, "%Y-%m-%dT%H:%M:%S.%fZ")
 
+    __data = []
     __thisDate = __startDateTime.date()
     while __thisDate <= __endDateTime.date():
       if __thisDate == __endDateTime.date():
@@ -36,12 +40,13 @@ class archive:
         __endDate = __startDateTime + timedelta(1)
         __thisEndDateTime = datetime(__endDate.year, __endDate.month, __endDate.day)
       self.__logger.debug("Loop for %s to %s", __startDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"), __thisEndDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
-# XXX: Need to loop over all archive types
-      #__data = self.requestData( 'journals', __startDateTime.strftime('%Y-%m-%d'), __startDateTime.timestamp() * 1000000 + 1, __endDateTime.timestamp() * 1000000)
+      for a in self.__config['eddnarchive']['archivetypes']:
+        self.__logger.debug("Loop for archive type '%s'", a)
+        __data.extend(self.requestData("blackmarkets", __startDateTime.strftime('%Y-%m-%d'), __startDateTime.timestamp() * 1000000 + 1, __endDateTime.timestamp() * 1000000))
       __thisDate = __thisDate + timedelta(1)
       __startDateTime = datetime.fromordinal(__thisDate.toordinal())
 
-    #return __data
+    return __data
 #############################################################################
 
 #############################################################################
