@@ -26,9 +26,9 @@ __debugEDDN       = False
 ###########################################################################
 # Configuration
 ###########################################################################
-configfile_fd = os.open("eddnlistener-config.json", os.O_RDONLY)
-configfile = os.fdopen(configfile_fd)
-__config = json.load(configfile)
+__configfile_fd = os.open("eddnlistener-config.json", os.O_RDONLY)
+__configfile = os.fdopen(__configfile_fd)
+__config = json.load(__configfile)
 ###########################################################################
 
 """
@@ -40,66 +40,72 @@ __config = json.load(configfile)
 ###########################################################################
 os.environ['TZ'] = 'UTC'
 __default_loglevel = logging.INFO
-logger = logging.getLogger('eddnlistener')
-logger.setLevel(__default_loglevel)
-logger_ch = logging.StreamHandler()
-logger_ch.setLevel(__default_loglevel)
-logger_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger_formatter.default_time_format = '%Y-%m-%d %H:%M:%S';
-logger_formatter.default_msec_format = '%s.%03d'
-logger_ch.setFormatter(logger_formatter)
-logger.addHandler(logger_ch)
+__logger = logging.getLogger('eddnlistener')
+__logger.setLevel(__default_loglevel)
+__logger_ch = logging.StreamHandler()
+__logger_ch.setLevel(__default_loglevel)
+__logger_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(module)s.%(funcName)s: %(message)s')
+__logger_formatter.default_time_format = '%Y-%m-%d %H:%M:%S';
+__logger_formatter.default_msec_format = '%s.%03d'
+__logger_ch.setFormatter(__logger_formatter)
+__logger.addHandler(__logger_ch)
 ###########################################################################
 
 ###########################################################################
 # Command-Line Arguments
 ###########################################################################
-parser = argparse.ArgumentParser()
-parser.add_argument("--loglevel", help="set the log level to one of: DEBUG, INFO (default), WARNING, ERROR, CRITICAL")
-args = parser.parse_args()
-if args.loglevel:
-  level = getattr(logging, args.loglevel.upper())
-  logger.setLevel(level)
-  logger_ch.setLevel(level)
+__parser = argparse.ArgumentParser()
+__parser.add_argument("--loglevel", help="set the log level to one of: DEBUG, INFO (default), WARNING, ERROR, CRITICAL")
+__args = __parser.parse_args()
+if __args.loglevel:
+  __level = getattr(logging, __args.loglevel.upper())
+  __logger.setLevel(__level)
+  __logger_ch.setLevel(__level)
 ###########################################################################
 
 def main():
-  logger.info('Initialising Database Connection')
-  db = eddn.database(__config['database']['url'])
+  __logger.info('Initialising Database Connection')
+  __db = eddn.database(__config['database']['url'])
 
-  logger.info('Starting EDDN Subscriber')
+  __logger.info('Starting EDDN Subscriber')
   
-  context   = zmq.Context()
-  subscriber  = context.socket(zmq.SUB)
+  __context   = zmq.Context()
+  __subscriber  = __context.socket(zmq.SUB)
   
-  subscriber.setsockopt(zmq.SUBSCRIBE, b"")
-  subscriber.setsockopt(zmq.RCVTIMEO, __timeoutEDDN)
+  __subscriber.setsockopt(zmq.SUBSCRIBE, b"")
+  __subscriber.setsockopt(zmq.RCVTIMEO, __timeoutEDDN)
 
+  # XXX: Find datestamp of last thing received.  Use the gatewayTimeStamp
+  #      of that to fill in any data gap since last running.
+  __archive = eddn.archive(__config, __logger)
+  __archive_data = __archive.requestData('journals', '2017-03-23', 1490227210000000, 1490227217000000)
+  # XXX: Now insert that data into the database
+  exit(0)
   while True:
     try:
-      subscriber.connect(__relayEDDN)
-      logger.info('Connect to ' + __relayEDDN)
+      __subscriber.connect(__relayEDDN)
+      __logger.info('Connect to ' + __relayEDDN)
       
       while True:
-        __message   = subscriber.recv()
+        __message   = __subscriber.recv()
         
         if __message == False:
-          subscriber.disconnect(__relayEDDN)
-          logger.warning('Disconnect from ' + __relayEDDN)
+          __subscriber.disconnect(__relayEDDN)
+          __logger.warning('Disconnect from ' + __relayEDDN)
           break
         
-        logger.debug('Got a message')
+        __logger.debug('Got a message')
 
         __message   = zlib.decompress(__message)
         if __message == False:
-          logger.warning('Failed to decompress message')
+          __logger.warning('Failed to decompress message')
           continue
 
         try: 
-          eddn_message = eddn.message(__message, __config, logger)
+          __eddn_message = eddn.message(__message, __config, __logger)
         except JSONParseError as Ex:
           __json, __message = Ex.args
-          logger.warning(__message)
+          __logger.warning(__message)
           continue
         
         ###############################################################
@@ -108,27 +114,27 @@ def main():
         __message_valid = True
         __message_blacklisted = False
         try:
-          eddn_message.validate()
+          __eddn_message.validate()
         except JSONValidationFailed as Ex:
-          logger.warning(Ex.args)
+          __logger.warning(Ex.args)
           __message_valid = False
           __message_blacklisted = None
         except SoftwareBlacklisted as Ex:
           name, version = Ex.args
-          logger.info("Blacklisted " + name + " (" + version + ")")
+          __logger.info("Blacklisted " + name + " (" + version + ")")
           __message_blacklisted = True
-        __message_schema_is_test = eddn_message.schema_is_test
+        __message_schema_is_test = __eddn_message.schema_is_test
 
         ###############################################################
         # Insert data into database
         ###############################################################
-        db.insertMessage(eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
+        __db.insertMessage(__eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
         ###############################################################
 
     except zmq.ZMQError as e:
-      logger.error('ZMQSocketException: ' + str(e))
-      subscriber.disconnect(__relayEDDN)
-      logger.warning('Disconnect from ' + __relayEDDN)
+      __logger.error('ZMQSocketException: ' + str(e))
+      __subscriber.disconnect(__relayEDDN)
+      __logger.warning('Disconnect from ' + __relayEDDN)
       time.sleep(5)
       
     

@@ -1,4 +1,5 @@
 import requests
+from requests.exceptions import ConnectionError, HTTPError, Timeout, TooManyRedirects
 from time import sleep
 from random import randint
 import re
@@ -36,6 +37,7 @@ class archive:
     }
     if nexttimestamp:
       __params['nexttimestamp'] = nexttimestamp
+    __data = []
     #################################################################
     while True:
       __params['limit'] = __limit
@@ -51,6 +53,7 @@ class archive:
           backoffSleep(__json['message'])
         else:
           #print(__response.json())
+          __data.extend(__json['Items'])
           if __json.get('LastEvaluatedTimestamp'):
             __params['nexttimestamp'] = __json['LastEvaluatedTimestamp']
             sleep(__backoff_sleep_interquery)
@@ -65,8 +68,10 @@ class archive:
         self.__logger.error(__main__ + ": Timeout")
       except TooManyRedirects as Ex:
         self.__logger.error(__main__ + ": TooManyRedirects")
-
+      except ValueError as Ex:
+        self.__logger.error(__main__ + ": ValueError (bad json?)")
     #################################################################
+    return __data
 
   def backoffSleep(msg=None):
     if __backoff_sleep < __backoff_sleep_start:
