@@ -14,6 +14,8 @@ import zmq
 import eddn
 from eddn.message.message import JSONParseError, JSONValidationFailed, SoftwareBlacklisted
 
+import threading
+
 """
  "  Configuration
 """
@@ -126,9 +128,10 @@ def main():
         ###############################################################
         # If this is the first message fill in any gap from eddn-archive
         if __first:
-          __logger.info("First message, checking eddn-archive...")
-          __archive = eddn.archive(__config, __logger)
-          __archive_data = __archive.getTimeRange(__db.latestMessageTimestamp(), __eddn_message.json['header']['gatewayTimestamp'])
+          __eddnarchive_thread = threading.Thread(target=eddnarchiveThread, args=(__db,__eddn_message.json['header']['gatewayTimestamp']))
+          __threads = []
+          __threads.append(__eddnarchive_thread)
+          __eddnarchive_thread.start()
           __first = False
 
         __db.insertMessage(__eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
@@ -139,8 +142,13 @@ def main():
       __subscriber.disconnect(__relayEDDN)
       __logger.warning('Disconnect from ' + __relayEDDN)
       time.sleep(5)
-      
-    
+
+def eddnarchiveThread(__db, __endgatewayTimestamp):
+  __logger.info("First message, checking eddn-archive...")
+  __archive = eddn.archive(__config, __logger)
+  __archive_data = __archive.getTimeRange(__db.latestMessageTimestamp(), __endgatewayTimestamp)
+  #print(__archive_data)
+  
 
 if __name__ == '__main__':
   main()
