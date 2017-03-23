@@ -50,4 +50,5 @@ class Message(Base):
   message = Column(JSONB)
   blacklisted = Column(Boolean)
   message_valid = Column(Boolean)
+  schema_test = Column(Boolean)
 ###########################################################################
