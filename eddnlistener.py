@@ -67,7 +67,6 @@ def main():
   __logger.info('Initialising Database Connection')
   __db = eddn.database(__config['database']['url'])
 
-  __logger.info('Starting EDDN Subscriber')
   
   __context   = zmq.Context()
   __subscriber  = __context.socket(zmq.SUB)
@@ -75,13 +74,10 @@ def main():
   __subscriber.setsockopt(zmq.SUBSCRIBE, b"")
   __subscriber.setsockopt(zmq.RCVTIMEO, __timeoutEDDN)
 
-  # XXX: Find datestamp of last thing received.  Use the gatewayTimeStamp
-  #      of that to fill in any data gap since last running.
-  __archive = eddn.archive(__config, __logger)
-  __archive_data = __archive.requestData('journals', '2017-03-23', 1490227210000000, 1490227217000000)
-  # XXX: Now insert that data into the database
-  exit(0)
+
+  __logger.info('Starting EDDN Subscriber')
   while True:
+    __first = True
     try:
       __subscriber.connect(__relayEDDN)
       __logger.info('Connect to ' + __relayEDDN)
@@ -128,6 +124,13 @@ def main():
         ###############################################################
         # Insert data into database
         ###############################################################
+        # If this is the first message fill in any gap from eddn-archive
+        if __first:
+          __logger.info("First message, checking eddn-archive...")
+          __archive = eddn.archive(__config, __logger)
+          __archive_data = __archive.getTimeRange(__db.latestMessageTimestamp(), __eddn_message.json['header']['gatewayTimestamp'])
+          __first = False
+
         __db.insertMessage(__eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
         ###############################################################
 
