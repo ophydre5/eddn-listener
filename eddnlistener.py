@@ -176,6 +176,9 @@ def eddnarchiveThread(__db, __endgatewayTimestamp):
   for a in __config['eddnarchive']['archivetypes']:
     for v in a.values():
       __latestMessageTimestamp = __db.latestMessageTimestamp(v)
+    __logger.debug("For '%s' __latestMessageTimestamp = %s", a, __latestMessageTimestamp)
+    if not __latestMessageTimestamp:
+      continue
     ##########################################################################
     for k in a.keys():
       __logger.info("Current latest gatewayTimeStamp for %s is %s", k, __latestMessageTimestamp)
