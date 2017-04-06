@@ -17,7 +17,7 @@ class message:
     """
     self.config = config
     self.logger = logger
-    if type(message) is bytes:
+    if type(message) is bytes or type(message) is str:
       try: 
         self.json = simplejson.loads(message)
         if not self.json:
@@ -29,7 +29,7 @@ class message:
     elif type(message) is dict:
       self.json = message
     else:
-      raise JSONParseError(message, "message neither bytes nor dict: " + str(type(message)))
+      raise JSONParseError(message, "message neither bytes, str, nor dict: " + str(type(message)))
 
   def validate(self):
     """
