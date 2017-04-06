@@ -3,3 +3,4 @@
 __pycache__/
 logs/
 eddnlistener-config.json
+test_eddnlistener-config.json
