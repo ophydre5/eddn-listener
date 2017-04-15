@@ -121,6 +121,7 @@ def main():
           __threads = []
           __threads.append(__eddnarchive_thread)
           __eddnarchive_thread.start()
+          time.sleep(5)
           # For testing when we want only the separate thread running
           #__eddnarchive_thread.join()
           #exit(0)

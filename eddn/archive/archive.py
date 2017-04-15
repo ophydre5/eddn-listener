@@ -25,10 +25,13 @@ class archive:
 
     if not start:
       self.__logger.warn("No 'start', no data in database yet?")
-      return []
+      return
 
     __startDateTime = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S.%fZ")
     if end:
+      if end == start:
+        self.__logger.warn("start == end, bailing")
+        return
       self.__logger.debug("Using supplied end timestamp")
       __endDateTime = datetime.strptime(end, "%Y-%m-%dT%H:%M:%S.%fZ")
     else:
