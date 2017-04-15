@@ -4,6 +4,7 @@
 #
 
 import sys, os
+import time
 import logging
 import argparse
 import json
@@ -68,6 +69,7 @@ if __args.loglevel:
 ##############################################################################
 def main():
   __logger.info('Initialising Database Connection')
+  time.sleep(10)
   __db = eddn.database(__config['database']['url'])
 
   
