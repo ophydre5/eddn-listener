@@ -4,6 +4,8 @@ from time import sleep
 from random import randint
 import re
 from datetime import datetime, timedelta
+from eddn.message.message import JSONParseError, JSONValidationFailed, SoftwareBlacklisted
+from eddn.utils import validateEDDNMessage
 
 class archive:
   """
@@ -11,9 +13,10 @@ class archive:
   """
 
 #############################################################################
-  def __init__(self, config, logger):
+  def __init__(self, config, logger, db):
     self.__config = config
     self.__logger = logger
+    self.__db = db
 #############################################################################
 
 #############################################################################
@@ -34,7 +37,6 @@ class archive:
       __endDateTime = datetime.strptime(__endOfDay, "%Y-%m-%dT%H:%M:%S.%fZ")
 
     self.__logger.debug("%s (%d) to %s (%d)", __startDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"), __startDateTime.timestamp() * 1000000, __endDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"), __endDateTime.timestamp() * 1000000)
-    __data = []
     __thisDate = __startDateTime.date()
     while __thisDate <= __endDateTime.date():
       if __thisDate == __endDateTime.date():
@@ -45,12 +47,11 @@ class archive:
       self.__logger.debug("For %s to %s", __startDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"), __thisEndDateTime.strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
 
       self.__logger.debug("Archive type '%s'", archive)
-      __data.extend(self.requestData(archive, __startDateTime.strftime('%Y-%m-%d'), __startDateTime.timestamp() * 1000000 + 1, __endDateTime.timestamp() * 1000000))
+      self.requestData(archive, __startDateTime.strftime('%Y-%m-%d'), __startDateTime.timestamp() * 1000000 + 1, __endDateTime.timestamp() * 1000000)
 
       __thisDate = __thisDate + timedelta(1)
       __startDateTime = datetime.fromordinal(__thisDate.toordinal())
 
-    return __data
 #############################################################################
 
 #############################################################################
@@ -70,10 +71,10 @@ class archive:
     self.__backoff_sleep_interquery = self.__backoff_sleep_start
     __params = {
       "limit": __limit,
-      "from": _from,
+      "from": '%.0f' % _from
     }
     if to:
-      __params['to'] = to
+      __params['to'] = '%.0f' % to
     if nexttimestamp:
       __params['nexttimestamp'] = nexttimestamp
     __data = []
@@ -98,8 +99,13 @@ class archive:
         else:
           #print(__response.json())
           self.__logger.debug("Got a valid response")
-# XXX: Need to insert into the database here
-          __data.extend(__json['Items'])
+          ####################################################################
+          for m in __json['Items']:
+            (__eddn_message, __message_valid, __message_blacklisted, __message_schema_is_test) = validateEDDNMessage(m, self.__config, self.__logger)
+            self.__db.insertMessage(__eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
+            self.__logger.info("Inserted message with gatewayTimeStamp: %s", __eddn_message.json['header']['gatewayTimestamp'])
+          ####################################################################
+
           if __json.get('LastEvaluatedTimestamp'):
             self.__logger.info("Which had a LastEvaluatedTimestamp(%s), so setting nexttimestamp", __json['LastEvaluatedTimestamp'])
             __params['nexttimestamp'] = __json['LastEvaluatedTimestamp']
