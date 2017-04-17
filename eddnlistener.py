@@ -117,7 +117,19 @@ def main():
         ###############################################################
         # If this is the first message fill in any gap from eddn-archive
         if __first:
-          __eddnarchive_thread = threading.Thread(target=eddnarchiveThread, args=(__db,__eddn_message.json['header']['gatewayTimestamp']))
+          # First store what the latest timestamps are *now*, as we might
+          # received new messages during the processing of other archivetypes
+          # causing us to then totally miss backfilling another.
+          # Also fixes the bug where we'd end up with 'end' being before 'start'
+          # due to the later messages.
+          #############################################################
+          latestMessageTimestamps = []
+          for a in __config['eddnarchive']['archivetypes']:
+            for v in a.values():
+              latestMessageTimestamps.append({'archive':a,'latestMessageTimestamp':__db.latestMessageTimestamp(v)})
+          #############################################################
+
+          __eddnarchive_thread = threading.Thread(target=eddnarchiveThread, args=(__db, __eddn_message.json['header']['gatewayTimestamp'], latestMessageTimestamps))
           __threads = []
           __threads.append(__eddnarchive_thread)
           __eddnarchive_thread.start()
@@ -141,20 +153,18 @@ def main():
 ##############################################################################
 
 ##############################################################################
-def eddnarchiveThread(__db, __endgatewayTimestamp):
-  __logger.info("First message, checking eddn-archive...")
+def eddnarchiveThread(__db, __endgatewayTimestamp, latestMessageTimestamps):
+  __logger.info("First message, checking eddn-archive up to %s", __endgatewayTimestamp)
   __archive = eddn.archive(__config, __logger, __db)
 
   ############################################################################
-  for a in __config['eddnarchive']['archivetypes']:
-    for v in a.values():
-      __latestMessageTimestamp = __db.latestMessageTimestamp(v)
-      if not __latestMessageTimestamp:
-        continue
-      __logger.debug("For '%s' __latestMessageTimestamp = %s", a, __latestMessageTimestamp)
-      for k in a.keys():
-        __logger.info("Current latest gatewayTimestamp for %s is %s", k, __latestMessageTimestamp)
-        __archive.getTimeRange(k, __latestMessageTimestamp, __endgatewayTimestamp)
+  for a in latestMessageTimestamps:
+    if not a['latestMessageTimestamp']:
+      continue
+    __logger.debug("For '%s' latestMessageTimestamp = %s", a['archive'], a['latestMessageTimestamp'])
+    for k in a['archive'].keys():
+      __logger.info("Current latest gatewayTimestamp for %s is %s", k, a['latestMessageTimestamp'])
+      __archive.getTimeRange(k, a['latestMessageTimestamp'], __endgatewayTimestamp)
   ############################################################################
 
   __logger.info("Backfill from EDDN Archive finished")

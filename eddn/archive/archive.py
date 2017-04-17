@@ -30,8 +30,11 @@ class archive:
     __startDateTime = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S.%fZ")
     if end:
       if end == start:
-        self.__logger.warn("start == end, bailing")
+        self.__logger.error("start == end, bailing")
         return
+      elif end < start:
+        self.__logger.error("end < start, exiting!")
+        exit(-1)
       self.__logger.debug("Using supplied end timestamp")
       __endDateTime = datetime.strptime(end, "%Y-%m-%dT%H:%M:%S.%fZ")
     else:
