@@ -1,0 +1,21 @@
+2017-04-11 09:27:17.365 - eddnlistener - WARNING - eddnlistener.main: Disconnect from tcp://eddn-relay.elite-markets.net:9500
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 92, in main
+    __message   = __subscriber.recv()
+  File "zmq/backend/cython/socket.pyx", line 631, in zmq.backend.cython.socket.Socket.recv (zmq/backend/cython/socket.c:5772)
+  File "zmq/backend/cython/socket.pyx", line 665, in zmq.backend.cython.socket.Socket.recv (zmq/backend/cython/socket.c:5572)
+  File "zmq/backend/cython/socket.pyx", line 139, in zmq.backend.cython.socket._recv_copy (zmq/backend/cython/socket.c:1725)
+  File "zmq/backend/cython/checkrc.pxd", line 15, in zmq.backend.cython.checkrc._check_rc (zmq/backend/cython/socket.c:6112)
+zmq.error.Again: Resource temporarily unavailable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 202, in <module>
+    main()
+  File "./eddnlistener.py", line 135, in main
+    time.sleep(5)
+NameError: name 'time' is not defined
+You have mail in /home/users/athan/Maildir
+athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
+10:27:17 0$

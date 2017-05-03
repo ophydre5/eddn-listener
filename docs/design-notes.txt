@@ -1,0 +1,9 @@
+Split Modules:
+
+EDDN Database storage
+
+eddn-archive:
+
+SELECT id,received,message->'header'->'gatewayTimestamp' FROM messages ORDER BY received DESC LIMIT 1;
+
+will tell us the gateway timestamp of the last thing we saw.
