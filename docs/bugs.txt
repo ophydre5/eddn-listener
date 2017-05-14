@@ -19,3 +19,92 @@ NameError: name 'time' is not defined
 You have mail in /home/users/athan/Maildir
 athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
 10:27:17 0$
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Wed 10 May 12:59:36 BST 2017
+2017-05-07 02:10:38.953 - eddnlistener - INFO - utils.validateEDDNMessage: Blacklisted ED-IBE (API) (0.6.4)
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 951, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 436, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.OperationalError: terminating connection due to administrator command
+SSL connection has been closed unexpectedly
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 174, in <module>
+    main()
+  File "./eddnlistener.py", line 142, in main
+    __db.insertMessage(__eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 29, in insertMessage
+    session.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 776, in commit
+    self.transaction.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 377, in commit
+    self._prepare_impl()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 357, in _prepare_impl
+    self.session.flush()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 1919, in flush
+    self._flush(objects)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2037, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/langhelpers.py", line 60, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 182, in reraise
+    raise value
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2001, in _flush
+    flush_context.execute()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 372, in execute
+    rec.execute(self)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 526, in execute
+    uow
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 65, in save_obj
+    mapper, table, insert)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 602, in _emit_insert_statements
+    execute(statement, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 729, in execute
+    return meth(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/sql/elements.py", line 322, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 826, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 958, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1159, in _handle_dbapi_exception
+    exc_info
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 188, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=exc_value)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 181, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 951, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 436, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (OperationalError) terminating connection due to administrator command
+SSL connection has been closed unexpectedly
+ 'INSERT INTO messages (message_raw, message, blacklisted, message_valid, schema_test) VALUES (%(message_raw)s, %(message)s, %(blacklisted)s, %(message_valid)s, %(schema_test)s) RETURNING messages.id' {'message_raw': '{"$schemaRef": "http://schemas.elite-markets.net/eddn/journal/1", "header": {"softwareVersion": "7.0.0.0", "uploaderID": "Felina Hawk", "gatewayTimestamp": "2017-05-07T02:11:39.990741Z", "softwareName": "EDDiscovery"}, "message": {"timestamp": "2017-05-07T02:11:39Z", "Age_MY": 3102, "StarType": "N", "RotationPeriod": 1.844558, "StarPos": [-14434.125, -10.0, 29932.75], "event": "Scan", "SurfaceTemperature": 5471000.0, "StellarMass": 0.742188, "StarSystem": "Eowyg Brai YS-U d2-70", "Radius": 11082.03125, "BodyName": "Eowyg Brai YS-U d2-70", "AbsoluteMagnitude": 5.134415, "DistanceFromArrivalLS": 0.0}}', 'message_valid': True, 'message': '{"$schemaRef": "http://schemas.elite-markets.net/eddn/journal/1", "header": {"softwareVersion": "7.0.0.0", "uploaderID": "Felina Hawk", "gatewayTimestamp": "2017-05-07T02:11:39.990741Z", "softwareName": "EDDiscovery"}, "message": {"timestamp": "2017-05-07T02:11:39Z", "Age_MY": 3102, "StarType": "N", "RotationPeriod": 1.844558, "StarPos": [-14434.125, -10.0, 29932.75], "event": "Scan", "SurfaceTemperature": 5471000.0, "StellarMass": 0.742188, "StarSystem": "Eowyg Brai YS-U d2-70", "Radius": 11082.03125, "BodyName": "Eowyg Brai YS-U d2-70", "AbsoluteMagnitude": 5.134415, "DistanceFromArrivalLS": 0.0}}', 'schema_test': False, 'blacklisted': False}
+You have mail in /home/users/athan/Maildir
+athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
+03:11:45 1$
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Startup is very slow when looking to backfill EDDN messages and trying
+to find the latest message of a given type, i.e.:
+
+2017-05-10 13:17:56 BST [26980-2] eddnlistener@eddn STATEMENT:  SELECT messages.message AS messages_message 
+        FROM messages 
+        WHERE (messages.message ->> '$schemaRef') LIKE '%blackmarket%' AND (messages.message #> '{header, gatewayTimestamp}') IS NOT NULL ORDER BY messages.message #> '{header, gatewayTimestamp}' DESC 
+         LIMIT 1
+
+is very slow.  It comes from this in eddn/database/database.py:
+
+  def latestMessageTimestamp(self, archiveType):
+    session = self.Session()
+    gatewayTimestamp = Message.message[("header", "gatewayTimestamp")]
+    schema = Message.message[("$schemaRef")].astext
+    results = session.query(Message.message).filter(schema.like("%"+archiveType+"%")).filter(gatewayTimestamp != None).order_by(desc(gatewayTimestamp)).limit(1)
+    for r in results:
+      return r.message['header']['gatewayTimestamp']
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
