@@ -108,7 +108,7 @@ class archive:
           ####################################################################
           for m in __json['Items']:
             (__eddn_message, __message_valid, __message_blacklisted, __message_schema_is_test) = validateEDDNMessage(m, self.__config, self.__logger)
-            self.__db.insertMessage(__eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
+            self.__db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp, __message_blacklisted, __message_valid, __message_schema_is_test)
             self.__logger.info("Inserted message with gatewayTimeStamp: %s", __eddn_message.json['header']['gatewayTimestamp'])
           ####################################################################
 

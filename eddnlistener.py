@@ -70,7 +70,7 @@ if __args.loglevel:
 ##############################################################################
 def main():
   __logger.info('Initialising Database Connection')
-  __db = eddn.database(__config['database']['url'])
+  __db = eddn.database(__config['database']['url'], __logger)
 
   
   __context   = zmq.Context()
@@ -139,7 +139,7 @@ def main():
           #exit(0)
           __first = False
 
-        __db.insertMessage(__eddn_message.json, __message_blacklisted, __message_valid, __message_schema_is_test)
+        __db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp,__message_blacklisted, __message_valid, __message_schema_is_test)
         ###############################################################
       ########################################################################
 

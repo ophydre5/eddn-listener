@@ -42,12 +42,15 @@ class message:
     message doesn't validate for any reason.
     Raises SoftwareBlacklisted if the software Name, or version, is on the blacklist.
     """
+    self.gatewaytimestamp = self.json['header']['gatewayTimestamp']
+
     if not "$schemaRef" in self.json:
       raise JSONValidationFailed("Message doesn't have a $schemaRef")
 
     __schema = re.match("^http:\/\/schemas\.elite-markets\.net\/eddn\/(?P<part>[^\/]+)\/[0-9]+", self.json["$schemaRef"])
     if not __schema:
       raise JSONValidationFailed("$schemaRef did not match regex: " + self.json["$schemaRef"])
+    self.schemaref = __schema.group("part")
 
     __knownSchema = False
     for s in self.config["schemas"]:
