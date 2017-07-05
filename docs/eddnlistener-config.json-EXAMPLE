@@ -29,27 +29,27 @@
 	[
 		{
 			"name":"blackmarket",
-			"message_schema":"http://schemas.elite-markets.net/eddn/blackmarket/1",
+			"message_schema":"https://eddn.edcd.io/schemas/blackmarket/1",
 			"local_schema":"blackmarket-01.json"
 		},
 		{
 			"name":"commodity",
-			"message_schema":"http://schemas.elite-markets.net/eddn/commodity/3",
+			"message_schema":"https://eddn.edcd.io/schemas/commodity/3",
 			"local_schema":"commodity-03.json"
 		},
 		{
 			"name":"journal",
-			"message_schema":"http://schemas.elite-markets.net/eddn/journal/1",
+			"message_schema":"https://eddn.edcd.io/schemas/journal/1",
 			"local_schema":"journal-01.json"
 		},
 		{
 			"name":"outfitting",
-			"message_schema":"http://schemas.elite-markets.net/eddn/outfitting/2",
+			"message_schema":"https://eddn.edcd.io/schemas/outfitting/2",
 			"local_schema":"outfitting-02.json"
 		},
 		{
 			"name":"shipyard",
-			"message_schema":"http://schemas.elite-markets.net/eddn/shipyard/2",
+			"message_schema":"https://eddn.edcd.io/schemas/shipyard/2",
 			"local_schema":"shipyard-02.json"
 		}
 	]

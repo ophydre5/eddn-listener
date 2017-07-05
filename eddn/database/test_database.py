@@ -34,7 +34,7 @@ class EddnDatabaseTests(unittest.TestCase):
 
   def test_insertMessage_ValidJSON(self):
     try:
-      self.db.insertMessage('{"header": {"uploaderID": "TenFourteen", "softwareName": "EDDI", "softwareVersion": "2.2.0", "gatewayTimestamp": "2017-03-12T14:09:18.786774Z"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/journal/1", "message": {"StarPos": [-5.375, 71.563, -54.25], "StarSystem": "Dietri", "SystemSecurity": "$SYSTEM_SECURITY_high;", "SystemFaction": "Dietri Limited", "timestamp": "2017-03-12T14:09:21Z", "SystemGovernment": "$government_Corporate;", "FactionState": "Boom", "event": "FSDJump", "SystemEconomy": "$economy_Agri;", "SystemAllegiance": "Federation"}}', False, True, False)
+      self.db.insertMessage('{"header": {"uploaderID": "TenFourteen", "softwareName": "EDDI", "softwareVersion": "2.2.0", "gatewayTimestamp": "2017-03-12T14:09:18.786774Z"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1", "message": {"StarPos": [-5.375, 71.563, -54.25], "StarSystem": "Dietri", "SystemSecurity": "$SYSTEM_SECURITY_high;", "SystemFaction": "Dietri Limited", "timestamp": "2017-03-12T14:09:21Z", "SystemGovernment": "$government_Corporate;", "FactionState": "Boom", "event": "FSDJump", "SystemEconomy": "$economy_Agri;", "SystemAllegiance": "Federation"}}', False, True, False)
     except Exception as ex:
       print(type(ex))
       print(ex.args)
