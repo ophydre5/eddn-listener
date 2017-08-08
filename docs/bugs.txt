@@ -108,3 +108,76 @@ is very slow.  It comes from this in eddn/database/database.py:
     for r in results:
       return r.message['header']['gatewayTimestamp']
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Wed 26 Jul 21:39:38 BST 2017
+2017-07-26 19:50:24.986 - eddnlistener - INFO - utils.validateEDDNMessage: Blacklisted EDDiscovery (8.1.3.0)
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.InternalError: invalid page in block 130948 of relation base/16394/16455
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 35, in insertMessage
+    session.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 801, in commit
+    self.transaction.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 392, in commit
+    self._prepare_impl()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 372, in _prepare_impl
+    self.session.flush()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2019, in flush
+    self._flush(objects)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2137, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/langhelpers.py", line 60, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 186, in reraise
+    raise value
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2101, in _flush
+    flush_context.execute()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 373, in execute
+    rec.execute(self)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 532, in execute
+    uow
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 174, in save_obj
+    mapper, table, insert)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 800, in _emit_insert_statements
+    execute(statement, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 914, in execute
+    return meth(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/sql/elements.py", line 323, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1010, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1146, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1341, in _handle_dbapi_exception
+    exc_info
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 202, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 185, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.InternalError: (psycopg2.InternalError) invalid page in block 130948 of relation base/16394/16455
+ [SQL: 'INSERT INTO messages (message, message_search, blacklisted, message_valid, schema_test, schemaref, gatewaytimestamp) VALUES (%(message)s, %(message_search)s, %(blacklisted)s, %(message_valid)s, %(schema_test)s, %(schemaref)s, %(gatewaytimestamp)s) RETURNING messages.id'] [parameters: {'message': '{"header": {"uploaderID": "BeanGTR", "softwareVersion": "2.3.0", "gatewayTimestamp": "2017-07-26T19:50:15.321473Z", "softwareName": "EDDI"}, "message": {"PlanetClass": "High metal content body", "SemiMajorAxis": 1069009797120.0, "StarPos": [-206.78125, 27.1875, -92.25], "event": "Scan", "timestamp": "2017-07-26T19:50:34Z", "DistanceFromArrivalLS": 3591.29541, "Radius": 7715584.5, "OrbitalPeriod": 526916160.0, "MassEM": 2.283549, "Eccentricity": 0.008741, "Periapsis": 150.545395, "RotationPeriod": 118229.296875, "StarSystem": "Col 285 Sector KS-T d3-68", "AxialTilt": -2.86825, "SurfaceGravity": 15.289104, "OrbitalInclination": -0.011449, "BodyName": "Col 285 Sector KS-T d3-68 A 5"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/journal/1"}', 'schema_test': False, 'schemaref': 'journal', 'blacklisted': False, 'message_search': 'null', 'gatewaytimestamp': '2017-07-26T19:50:15.321473Z', 'message_valid': True}]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 142, in main
+    __db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp,__message_blacklisted, __message_valid, __message_schema_is_test)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 37, in insertMessage
+    except sqlalchemy.exc.OperationalError as ex:
+NameError: name 'sqlalchemy' is not defined
+athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
+20:50:33 0$
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
