@@ -32,6 +32,7 @@ class message:
       raise JSONParseError(message, "message neither bytes, str, nor dict: " + str(type(message)))
 
   def validate(self):
+    self.schema_is_test = False
     """
     Validates a message against relevant schema, and checks if the software
     name/version are on the blacklist.
@@ -47,7 +48,7 @@ class message:
     if not "$schemaRef" in self.json:
       raise JSONValidationFailed("Message doesn't have a $schemaRef")
 
-    __schema = re.match("^http:\/\/schemas\.elite-markets\.net\/eddn\/(?P<part>[^\/]+)\/[0-9]+", self.json["$schemaRef"])
+    __schema = re.match("^https:\/\/eddn\.edcd\.io\/schemas\/(?P<part>[^\/]+)\/[0-9]+", self.json["$schemaRef"])
     if not __schema:
       raise JSONValidationFailed("$schemaRef did not match regex: " + self.json["$schemaRef"])
     self.schemaref = __schema.group("part")
@@ -61,7 +62,6 @@ class message:
     if not __knownSchema:
       raise JSONValidationFailed("Unknown schema: " + self.json["$schemaRef"])
 
-    self.schema_is_test = False
     self.logger.debug("Checking message_schema '" + schemainfo["message_schema"] + "' against '" + self.json["$schemaRef"] + "'")
     if re.match(schemainfo["message_schema"], self.json["$schemaRef"]):
       self.logger.debug("Checking for test schema in: " + self.json["$schemaRef"])

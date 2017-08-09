@@ -181,3 +181,20 @@ NameError: name 'sqlalchemy' is not defined
 athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
 20:50:33 0$
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Wed  9 Aug 12:53:27 BST 2017
+2017-08-09 11:52:44.193 - eddnlistener - INFO - utils.validateEDDNMessage: Blacklisted ED-IBE (API) (0.6.6)
+2017-08-09 11:52:52.924 - eddnlistener - WARNING - utils.validateEDDNMessage: ('$schemaRef did not match regex: https://eddn.edcd.io/schemas/journal/1',)
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 111, in main
+    (__eddn_message, __message_valid, __message_blacklisted, __message_schema_is_test) = validateEDDNMessage(__message, __config, __logger)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/utils.py", line 28, in validateEDDNMessage
+    __message_schema_is_test = __eddn_message.schema_is_test
+AttributeError: 'message' object has no attribute 'schema_is_test'
+
+FIXED: __eddn_message.schema_is_test was only being initialised AFTER
+the "known schema" regex test, which was against the old URLs.  Moved
+the initialisation to False earlier as well as updating the schema URL
+regex.
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
