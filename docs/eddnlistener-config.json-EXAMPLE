@@ -6,9 +6,6 @@
 	"blacklist":
 	[
 		{
-			"softwarename":"ed-ibe (api)"
-		},
-		{
 			"softwarename":"ed central production server"
 		},
 		{
