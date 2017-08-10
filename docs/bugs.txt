@@ -198,3 +198,26 @@ the "known schema" regex test, which was against the old URLs.  Moved
 the initialisation to False earlier as well as updating the schema URL
 regex.
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Thu 10 Aug 18:35:38 BST 2017
+2017-08-10 17:29:10.862 - eddnlistener - INFO - utils.validateEDDNMessage: Blacklisted EDDiscovery (8.1.4.0)
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 111, in main
+    (__eddn_message, __message_valid, __message_blacklisted, __message_schema_is_test) = validateEDDNMessage(__message, __config, __logger)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/utils.py", line 19, in validateEDDNMessage
+    __eddn_message.validate()
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/message/message.py", line 84, in validate
+    validate(self.json, schemainfo["schema"])
+  File "/usr/lib/python3/dist-packages/jsonschema/validators.py", line 478, in validate
+    cls(schema, *args, **kwargs).validate(instance)
+  File "/usr/lib/python3/dist-packages/jsonschema/validators.py", line 123, in validate
+    raise error
+jsonschema.exceptions.ValidationError: 'Location' is not one of ['Docked', 'FSDJump', 'Scan']
+
+Failed validating 'enum' in schema['properties']['message']['properties']['event']:
+    {'enum': ['Docked', 'FSDJump', 'Scan']}
+
+On instance['message']['event']:
+    'Location'
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
