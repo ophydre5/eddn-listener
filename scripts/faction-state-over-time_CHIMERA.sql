@@ -13,6 +13,7 @@ SELECT id,gatewaytimestamp,starsystem,(factions->>'Name') as factionname,(factio
 					'Forsha',
 					'Guanatamas',
 					'HIP 25880',
+					'HIP 26933',
 					'HIP 32806',
 					'Kamuti',
 					'LTT 11926',
