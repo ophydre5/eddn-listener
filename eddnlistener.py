@@ -6,6 +6,7 @@
 import sys, os
 import time
 import logging
+import logging.handlers
 import argparse
 import json
 
@@ -60,11 +61,15 @@ __logger.addHandler(__logger_ch)
 ###########################################################################
 __parser = argparse.ArgumentParser()
 __parser.add_argument("--loglevel", help="set the log level to one of: DEBUG, INFO (default), WARNING, ERROR, CRITICAL")
+__parser.add_argument("--logfile", help="save logging output to a file")
 __args = __parser.parse_args()
 if __args.loglevel:
   __level = getattr(logging, __args.loglevel.upper())
   __logger.setLevel(__level)
   __logger_ch.setLevel(__level)
+if __args.logfile:
+  __logfile_handler = logging.handlers.TimedRotatingFileHandler(__args.logfile, when="midnight", backupCount=3)
+  __logger.addHandler(__logfile_handler)
 ###########################################################################
 
 ##############################################################################
