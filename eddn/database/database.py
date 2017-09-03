@@ -4,7 +4,9 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, Text, text, Boolean
 from sqlalchemy.sql.sqltypes import TIMESTAMP
-from sqlalchemy.dialects.postgresql.json import JSON, JSONB
+#from sqlalchemy.dialects.postgresql.json import JSON, JSONB
+#from sqlalchemy.dialects.mysql.json import JSON
+import json
 
 ###########################################################################
 # Our base class for database operations
@@ -16,15 +18,15 @@ class database(object):
     self.Session = sessionmaker(bind=db_engine)
     self.__logger = __logger
 
-  def insertMessage(self, json, schemaref, gatewaytimestamp, blacklisted, message_valid, schema_test):
+  def insertMessage(self, myjson, schemaref, gatewaytimestamp, blacklisted, message_valid, schema_test):
     __attempts = 0
     __max_attempts = 3
     __attempt_sleep = 5
     while __attempts < __max_attempts:
       try:  
         db_msg = Message(
-          message_raw = json,
-          message = json,
+          message_raw = json.dumps(myjson),
+          #message = json.dumps(myjson),
           blacklisted = blacklisted,
           message_valid = message_valid,
           schema_test = schema_test,
@@ -61,8 +63,8 @@ class Message(Base):
 
   id = Column(Integer, autoincrement=True, primary_key=True)
   received = Column(TIMESTAMP, nullable=False, server_default=text("NOW()"), index=True)
-  message_raw = Column(JSON)
-  message = Column(JSONB)
+  message_raw = Column(Text)
+  #message = Column(Text)
   blacklisted = Column(Boolean)
   message_valid = Column(Boolean)
   schema_test = Column(Boolean)
