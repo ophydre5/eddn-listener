@@ -1,6 +1,6 @@
 {
     "$schema"               : "http://json-schema.org/draft-04/schema#",
-    "id"                    : "http://schemas.elite-markets.net/eddn/journal/1#",
+    "id"                    : "https://eddn.edcd.io/schemas/journal/1#",
     "type"                  : "object",
     "additionalProperties"  : false,
     "required": [ "$schemaRef", "header", "message" ],
@@ -40,7 +40,7 @@
                     "format"        : "date-time"
                 },
                 "event" : {
-                    "enum"          : [ "Docked", "FSDJump", "Scan" ]
+                    "enum"          : [ "Docked", "FSDJump", "Scan", "Location" ]
                 },
                 "StarSystem": {
                     "type"          : "string",
@@ -59,7 +59,9 @@
                 "BoostUsed"         : { "$ref" : "#/definitions/disallowed" },
                 "FuelLevel"         : { "$ref" : "#/definitions/disallowed" },
                 "FuelUsed"          : { "$ref" : "#/definitions/disallowed" },
-                "JumpDist"          : { "$ref" : "#/definitions/disallowed" }
+                "JumpDist"          : { "$ref" : "#/definitions/disallowed" },
+                "Latitude"          : { "$ref" : "#/definitions/disallowed" },
+                "Longitude"         : { "$ref" : "#/definitions/disallowed" }
             },
             "patternProperties"     : {
                 "_Localised$"       : { "$ref" : "#/definitions/disallowed" }

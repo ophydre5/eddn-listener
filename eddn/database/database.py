@@ -25,8 +25,7 @@ class database(object):
     while __attempts < __max_attempts:
       try:  
         db_msg = Message(
-          message_raw = json.dumps(myjson),
-          #message = json.dumps(myjson),
+          message = json.dumps(myjson),
           blacklisted = blacklisted,
           message_valid = message_valid,
           schema_test = schema_test,
@@ -63,8 +62,8 @@ class Message(Base):
 
   id = Column(Integer, autoincrement=True, primary_key=True)
   received = Column(TIMESTAMP, nullable=False, server_default=text("NOW()"), index=True)
-  message_raw = Column(Text)
-  #message = Column(Text)
+  message = Column(Text)
+  #message_search = Column(JSONB)
   blacklisted = Column(Boolean)
   message_valid = Column(Boolean)
   schema_test = Column(Boolean)

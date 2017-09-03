@@ -69,7 +69,7 @@ class EddnMessageTests(unittest.TestCase):
 	############################################################
   def test_unknownSchema(self):
     m = message(
-      '{"message": {"event": "Docked"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/wibble/1"}',
+      '{"message": {"event": "Docked"}, "$schemaRef": "https://eddn.edcd.io/schemas/wibble/1"}',
       self.config, self.logger)    
     with self.assertRaises(JSONValidationFailed):
       m.validate()
@@ -80,7 +80,7 @@ class EddnMessageTests(unittest.TestCase):
 	############################################################
   def test_schemaNotMatchPartDetectedRegex(self):
     m = message(
-      '{"message": {"event": "Docked"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/journal/2"}',
+      '{"message": {"event": "Docked"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/2"}',
       self.config, self.logger)    
     with self.assertRaises(JSONValidationFailed):
       m.validate()
@@ -91,7 +91,7 @@ class EddnMessageTests(unittest.TestCase):
 	############################################################
   def test_detectedSchemaIsTest(self):
     m = message(
-      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good Software", "softwareVersion": "2.2.6.2", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/journal/1/test"}',
+      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good Software", "softwareVersion": "2.2.6.2", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1/test"}',
       self.config, self.logger)    
     m.validate()
     self.assertEqual(m.schema_is_test, True)
@@ -102,7 +102,7 @@ class EddnMessageTests(unittest.TestCase):
 	############################################################
   def test_schemaRefNotAsExpected(self):
     m = message(
-      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good Software", "softwareVersion": "2.2.6.2", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/journal/2"}',
+      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good Software", "softwareVersion": "2.2.6.2", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/2"}',
       self.config, self.logger)    
     with self.assertRaises(JSONValidationFailed):
       m.validate()
@@ -113,7 +113,7 @@ class EddnMessageTests(unittest.TestCase):
 	############################################################
   def test_schemaLoadFailsFileNotFoundError(self):
     m = message(
-      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good Software", "softwareVersion": "2.2.6.2", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/python_tests/1"}',
+      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good Software", "softwareVersion": "2.2.6.2", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "https://eddn.edcd.io/schemas/python_tests/1"}',
       self.config, self.logger)    
     with self.assertRaises(FileNotFoundError):
       m.validate()
@@ -124,7 +124,7 @@ class EddnMessageTests(unittest.TestCase):
 	############################################################
   def test_schemaLoadFailsJSONDecodeError(self):
     m = message(
-      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good Software", "softwareVersion": "2.2.6.2", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/python_tests_02/2"}',
+      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good Software", "softwareVersion": "2.2.6.2", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "https://eddn.edcd.io/schemas/python_tests_02/2"}',
       self.config, self.logger)    
     with self.assertRaises(simplejson.scanner.JSONDecodeError):
       m.validate()
@@ -136,7 +136,7 @@ class EddnMessageTests(unittest.TestCase):
   def test_messageValidatesAgainstSchema(self):
     # This is missing the mandatory message->timestamp element
     m = message(
-      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good Software", "softwareVersion": "2.2.6.2", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/journal/1"}',
+      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good Software", "softwareVersion": "2.2.6.2", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1"}',
       self.config, self.logger)    
     with self.assertRaises(ValidationError):
       m.validate()
@@ -147,7 +147,7 @@ class EddnMessageTests(unittest.TestCase):
 	############################################################
   def test_blacklistedGoodSoftwareNameAllowed(self):
     m = message(
-      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good SoftwareName", "softwareVersion": "0.6.1", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/journal/1"}',
+      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Good SoftwareName", "softwareVersion": "0.6.1", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1"}',
       self.config, self.logger)
     try:
       m.validate()
@@ -160,7 +160,7 @@ class EddnMessageTests(unittest.TestCase):
 	############################################################
   def test_blacklistedSoftwareNameDetected(self):
     m = message(
-      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Bad SoftwareName", "softwareVersion": "0.6.1", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/journal/1"}',
+      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Bad SoftwareName", "softwareVersion": "0.6.1", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1"}',
       self.config, self.logger)    
     with self.assertRaises(SoftwareBlacklisted):
       m.validate()
@@ -171,7 +171,7 @@ class EddnMessageTests(unittest.TestCase):
 	############################################################
   def test_blacklistedSoftwareVersionDetected(self):
     m = message(
-      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Bad SoftwareVersion", "softwareVersion": "13.0.1", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "http://schemas.elite-markets.net/eddn/journal/1"}',
+      '{"header": {"uploaderID": "Cmdr Jameson", "softwareName": "Test Bad SoftwareVersion", "softwareVersion": "13.0.1", "gatewayTimestamp": "2017-03-12T19:26:20.984504Z"}, "message": {"event": "Docked", "StarPos": [-21.531, -6.313, 116.031], "timestamp": "2017-03-12T19:26:20Z", "StarSystem": "Laksak", "StationName": "Littlewood Gateway", "StationType": "Orbis", "FactionState": "Expansion", "StationEconomy": "$economy_Agri;", "StationFaction": "Laksak Ltd", "StationAllegiance": "Federation", "StationGovernment": "$government_Corporate;"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1"}',
       self.config, self.logger)    
     with self.assertRaises(SoftwareBlacklisted):
       m.validate()

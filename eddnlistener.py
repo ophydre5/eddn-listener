@@ -22,7 +22,7 @@ import threading
 """
  "  Configuration
 """
-__relayEDDN       = 'tcp://eddn-relay.elite-markets.net:9500'
+__relayEDDN       = 'tcp://eddn.edcd.io:9500'
 __timeoutEDDN       = 600000
 
 # Set False to listen to production stream
@@ -145,6 +145,7 @@ def main():
           __first = False
 
         __db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp,__message_blacklisted, __message_valid, __message_schema_is_test)
+        #exit(0)
         ###############################################################
       ########################################################################
 
