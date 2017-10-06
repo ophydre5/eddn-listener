@@ -1,0 +1,6 @@
+SELECT
+	DISTINCT message->'header'->>'softwareName' AS softwareName,
+	COUNT(message->'header'->>'softwareName') AS count
+FROM messages
+	GROUP BY message->'header'->>'softwareName'
+	ORDER BY count DESC;
