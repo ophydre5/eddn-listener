@@ -1364,4 +1364,147 @@ On instance['message']:
 athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
 13:02:24 0$ 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2017-10-26 02:11:45.543 - eddnlistener - INFO - utils.validateEDDNMessage: Blacklisted EDDiscovery (8.1.4.0)
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.InternalError: invalid page in block 455875 of relation base/16394/11999444
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 35, in insertMessage
+    session.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 801, in commit
+    self.transaction.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 392, in commit
+    self._prepare_impl()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 372, in _prepare_impl
+    self.session.flush()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2019, in flush
+    self._flush(objects)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2137, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/langhelpers.py", line 60, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 186, in reraise
+    raise value
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2101, in _flush
+    flush_context.execute()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 373, in execute
+    rec.execute(self)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 532, in execute
+    uow
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 174, in save_obj
+    mapper, table, insert)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 800, in _emit_insert_statements
+    execute(statement, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 914, in execute
+    return meth(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/sql/elements.py", line 323, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1010, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1146, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1341, in _handle_dbapi_exception
+    exc_info
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 202, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 185, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.InternalError: (psycopg2.InternalError) invalid page in block 455875 of relation base/16394/11999444
+ [SQL: 'INSERT INTO messages (message, message_search, blacklisted, message_valid, schema_test, schemaref, gatewaytimestamp) VALUES (%(message)s, %(message_search)s, %(blacklisted)s, %(message_valid)s, %(schema_test)s, %(schemaref)s, %(gatewaytimestamp)s) RETURNING messages.id'] [parameters: {'message': '{"message": {"SystemGovernment": "$government_Democracy;", "Population": 82574191, "Body": "Newton Hub", "SystemSecurity": "$SYSTEM_SECURITY_high;", "event": "Location", "StationName": "Newton Hub", "StarPos": [4.844, 49.563, -13.313], "Docked": true, "BodyType": "Station", "StarSystem": "GD 140", "SystemAllegiance": "Federation", "FactionState": "Boom", "SystemFaction": "Progressive Party of GD 140", "StationType": "Coriolis", "Factions": [{"Name": "Progressive Party of GD 140", "Influence": 0.328328, "Allegiance": "Federation", "Government": "Democracy", "FactionState": "Boom"}, {"Name": "Pilots Federation Local Branch", "Influence": 0.0, "Allegiance": "PilotsFederation", "Government": "Democracy", "FactionState": "None"}, {"Name": "Parcae Dynamic PLC", "Allegiance": "Federation", "FactionState": "None", "Influence": 0.081081, "Government": "Corporate", "PendingStates": [{"State": "Boom", "Trend": 1}]}, {"Name": "LHS 2430 for Equality", "Influence": 0.078078, "Allegiance": "Federation", "Government": "Democracy", "FactionState": "War"}, {"Name": "GD 140 & Co", "Allegiance": "Federation", "FactionState": "Boom", "Influence": 0.084084, "Government": "Corporate", "PendingStates": [{"State": "Election", "Trend": 0}]}, {"Name": "United GD 140 Liberty Party", "Allegiance": "Independent", "FactionState": "War", "Influence": 0.052052, "Government": "Dictatorship", "PendingStates": [{"State": "Boom", "Trend": 1}]}, {"Name": "LP 320-359 Public Services", "Influence": 0.14014, "Allegiance": "Federation", "Government": "Corporate", "FactionState": "Boom"}, {"Name": "GD 140 Systems", "Allegiance": "Federation", "FactionState": "Boom", "Influence": 0.084084, "Government": "Corporate", "PendingStates": [{"State": "Election", "Trend": 0}]}, {"Name": "Foyama Novingo Startourism", "Influence": 0.152152, "Allegiance": "Empire", "Government": "Corporate", "FactionState": "Boom"}], "SystemEconomy": "$economy_HighTech;", "timestamp": "2017-10-27T00:35:56Z"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1", "header": {"uploaderID": "Asim Zaman", "gatewayTimestamp": "2017-10-27T00:35:56.830692Z", "softwareName": "E:D Market Connector [Windows]", "softwareVersion": "2.4.4.0"}}', 'message_valid': True, 'schema_test': False, 'schemaref': 'journal', 'message_search': 'null', 'gatewaytimestamp': '2017-10-27T00:35:56.830692Z', 'blacklisted': False}]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 142, in main
+    __db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp,__message_blacklisted, __message_valid, __message_schema_is_test)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 37, in insertMessage
+    except sqlalchemy.exc.OperationalError as ex:
+NameError: name 'sqlalchemy' is not defined
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2017-11-05 04:15:34.039 - eddnlistener - INFO - utils.validateEDDNMessage: Blacklisted EDDiscovery (8.1.4.0)
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.InternalError: invalid page in block 387798 of relation base/16394/14167236
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 35, in insertMessage
+    session.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 801, in commit
+    self.transaction.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 392, in commit
+    self._prepare_impl()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 372, in _prepare_impl
+    self.session.flush()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2019, in flush
+    self._flush(objects)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2137, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/langhelpers.py", line 60, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 186, in reraise
+    raise value
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2101, in _flush
+    flush_context.execute()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 373, in execute
+    rec.execute(self)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 532, in execute
+    uow
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 174, in save_obj
+    mapper, table, insert)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 800, in _emit_insert_statements
+    execute(statement, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 914, in execute
+    return meth(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/sql/elements.py", line 323, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1010, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1146, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1341, in _handle_dbapi_exception
+    exc_info
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 202, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 185, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.InternalError: (psycopg2.InternalError) invalid page in block 387798 of relation base/16394/14167236
+ [SQL: 'INSERT INTO messages (message, message_search, blacklisted, message_valid, schema_test, schemaref, gatewaytimestamp) VALUES (%(message)s, %(message_search)s, %(blacklisted)s, %(message_valid)s, %(schema_test)s, %(schemaref)s, %(gatewaytimestamp)s) RETURNING messages.id'] [parameters: {'blacklisted': False, 'schema_test': False, 'message_valid': True, 'gatewaytimestamp': '2017-11-05T17:27:39.731934Z', 'message_search': 'null', 'message': '{"header": {"softwareVersion": "8.4.1.0", "uploaderID": "roy S", "softwareName": "EDDiscovery", "gatewayTimestamp": "2017-11-05T17:27:39.731934Z"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1", "message": {"OrbitalPeriod": 281284.53125, "Atmosphere": "", "TidalLock": true, "Materials": [{"Name": "iron", "Percent": 21.689142}, {"Name": "nickel", "Percent": 16.404758}, {"Name": "sulphur", "Percent": 15.611857}, {"Name": "carbon", "Percent": 13.127954}, {"Name": "chromium", "Percent": 9.754329}, {"Name": "phosphorus", "Percent": 8.404741}, {"Name": "zinc", "Percent": 5.894297}, {"Name": "germanium", "Percent": 4.606871}, {"Name": "cadmium", "Percent": 1.68426}, {"Name": "niobium", "Percent": 1.482337}, {"Name": "ruthenium", "Percent": 1.339443}], "BodyName": "Swoiwns CZ-B c2-14 2", "Volcanism": "", "StarPos": [-1331.156, -124.531, 297.094], "AtmosphereType": "None", "OrbitalInclination": 2.362799, "TerraformState": "", "DistanceFromArrivalLS": 15.192152, "timestamp": "2017-05-01T18:40:02Z", "Radius": 5760867.0, "SurfaceTemperature": 877.139221, "MassEM": 0.828879, "PlanetClass": "High metal content body", "SemiMajorAxis": 67939072.0, "Periapsis": 33.418346, "event": "Scan", "Eccentricity": 0.064532, "Landable": true, "SurfaceGravity": 9.954625, "SurfacePressure": 0.0, "StarSystem": "Swoiwns CZ-B c2-14", "RotationPeriod": 1377771.25}}', 'schemaref': 'journal'}]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 142, in main
+    __db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp,__message_blacklisted, __message_valid, __message_schema_is_test)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 37, in insertMessage
+    except sqlalchemy.exc.OperationalError as ex:
+NameError: name 'sqlalchemy' is not defined
+athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
+17:27:39 0$
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
