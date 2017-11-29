@@ -1507,4 +1507,24 @@ NameError: name 'sqlalchemy' is not defined
 athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
 17:27:39 0$
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+qlalchemy.exc.InternalError: (psycopg2.InternalError) invalid page in block 358186 of relation base/16394/14167235
+ [SQL: 'INSERT INTO messages (message, message_search, blacklisted, message_valid, schema_test, schemaref, gatewaytimestamp) VALUES (%(message)s, %(message_search)s, %(blacklisted)s, %(message_valid)s, %(schema_test)s, %(schemaref)s, %(gatewaytimestamp)s) RETURNING messages.id'] [parameters: {'schemaref': 'journal', 'message_valid': True, 'gatewaytimestamp': '2017-11-15T10:45:09.536215Z', 'blacklisted': False, 'message': '{"message": {"SystemSecurity": "$GAlAXY_MAP_INFO_state_anarchy;", "SystemEconomy": "$economy_None;", "Population": 0, "StarPos": [11.0, -52.438, 40.813], "SystemGovernment": "$government_None;", "StarSystem": "LP 283-3", "event": "FSDJump", "timestamp": "2017-11-15T10:38:54Z", "SystemAllegiance": ""}, "header": {"softwareName": "E:D Market Connector [Windows]", "softwareVersion": "2.4.6.1", "uploaderID": "MusTheBunneh", "gatewayTimestamp": "2017-11-15T10:45:09.536215Z"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1"}', 'message_search': 'null', 'schema_test': False}]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 142, in main
+    __db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp,__message_blacklisted, __message_valid, __message_schema_is_test)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 37, in insertMessage
+    except sqlalchemy.exc.OperationalError as ex:
+NameError: name 'sqlalchemy' is not defined
+athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
+10:45:09 0$
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+sqlalchemy.exc.InternalError: (psycopg2.InternalError) invalid page in block 328
+742 of relation base/16394/16282581
+03:26:01
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
