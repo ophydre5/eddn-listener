@@ -39,3 +39,15 @@ SELECT DISTINCT message->'header'->'softwareName' AS softwareName, COUNT(message
 
 Time: 2860.728 ms
 
+REINDEX:
+REINDEX ( VERBOSE ) INDEX message_search;
+REINDEX ( VERBOSE ) INDEX message_idx;
+REINDEX ( VERBOSE ) INDEX  messages_pkey;  
+REINDEX ( VERBOSE ) INDEX  gatewaytimestamp;
+REINDEX ( VERBOSE ) INDEX  message_search;
+REINDEX ( VERBOSE ) INDEX  received_index;
+REINDEX ( VERBOSE ) INDEX  schemaref;  
+REINDEX ( VERBOSE ) INDEX  softwarename;
+
+VACUUM REPAIR:
+VACUUM FULL VERBOSE messages;
