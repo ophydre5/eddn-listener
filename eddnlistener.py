@@ -83,7 +83,6 @@ def main():
   __logger.info('Starting EDDN Subscriber')
   ############################################################################
   while True:
-    __first = True
     ##########################################################################
     try:
       __subscriber.connect(__relayEDDN)
@@ -115,30 +114,6 @@ def main():
         ###############################################################
         # Insert data into database
         ###############################################################
-        # If this is the first message fill in any gap from eddn-archive
-        if False and __first:
-          # First store what the latest timestamps are *now*, as we might
-          # received new messages during the processing of other archivetypes
-          # causing us to then totally miss backfilling another.
-          # Also fixes the bug where we'd end up with 'end' being before 'start'
-          # due to the later messages.
-          #############################################################
-          latestMessageTimestamps = []
-          for a in __config['eddnarchive']['archivetypes']:
-            for v in a.values():
-              latestMessageTimestamps.append({'archive':a,'latestMessageTimestamp':__db.latestMessageTimestamp(v)})
-          #############################################################
-
-          __eddnarchive_thread = threading.Thread(target=eddnarchiveThread, args=(__db, __eddn_message.json['header']['gatewayTimestamp'], latestMessageTimestamps))
-          __threads = []
-          __threads.append(__eddnarchive_thread)
-          __eddnarchive_thread.start()
-          time.sleep(5)
-          # For testing when we want only the separate thread running
-          #__eddnarchive_thread.join()
-          #exit(0)
-          __first = False
-
         __db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp,__message_blacklisted, __message_valid, __message_schema_is_test)
         #exit(0)
         ###############################################################
@@ -151,24 +126,6 @@ def main():
       time.sleep(5)
     ##########################################################################
   ############################################################################
-##############################################################################
-
-##############################################################################
-def eddnarchiveThread(__db, __endgatewayTimestamp, latestMessageTimestamps):
-  __logger.info("First message, checking eddn-archive up to %s", __endgatewayTimestamp)
-  __archive = eddn.archive(__config, __logger, __db)
-
-  ############################################################################
-  for a in latestMessageTimestamps:
-    if not a['latestMessageTimestamp']:
-      continue
-    __logger.debug("For '%s' latestMessageTimestamp = %s", a['archive'], a['latestMessageTimestamp'])
-    for k in a['archive'].keys():
-      __logger.info("Current latest gatewayTimestamp for %s is %s", k, a['latestMessageTimestamp'])
-      __archive.getTimeRange(k, a['latestMessageTimestamp'], __endgatewayTimestamp)
-  ############################################################################
-
-  __logger.info("Backfill from EDDN Archive finished")
 ##############################################################################
 
 if __name__ == '__main__':
