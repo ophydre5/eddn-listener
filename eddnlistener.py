@@ -116,7 +116,7 @@ def main():
         # Insert data into database
         ###############################################################
         # If this is the first message fill in any gap from eddn-archive
-        if __first:
+        if False and __first:
           # First store what the latest timestamps are *now*, as we might
           # received new messages during the processing of other archivetypes
           # causing us to then totally miss backfilling another.
