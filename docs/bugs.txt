@@ -301,3 +301,1273 @@ NameError: name 'sqlalchemy' is not defined
 You have new mail in /home/users/athan/Maildir
 athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2017-09-10 01:34:30.417 - eddnlistener - INFO - utils.validateEDDNMessage: Blacklisted EDDiscovery (8.1.4.0)
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.InternalError: invalid page in block 15209 of relation base/16394/16455
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 35, in insertMessage
+    session.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 801, in commit
+    self.transaction.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 392, in commit
+    self._prepare_impl()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 372, in _prepare_impl
+    self.session.flush()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2019, in flush
+    self._flush(objects)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2137, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/langhelpers.py", line 60, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 186, in reraise
+    raise value
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2101, in _flush
+    flush_context.execute()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 373, in execute
+    rec.execute(self)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 532, in execute
+    uow
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 174, in save_obj
+    mapper, table, insert)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 800, in _emit_insert_statements
+    execute(statement, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 914, in execute
+    return meth(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/sql/elements.py", line 323, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1010, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1146, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1341, in _handle_dbapi_exception
+    exc_info
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 202, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 185, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.InternalError: (psycopg2.InternalError) invalid page in block 15209 of relation base/16394/16455
+ [SQL: 'INSERT INTO messages (message, message_search, blacklisted, message_valid, schema_test, schemaref, gatewaytimestamp) VALUES (%(message)s, %(message_search)s, %(blacklisted)s, %(message_valid)s, %(schema_test)s, %(schemaref)s, %(gatewaytimestamp)s) RETURNING messages.id'] [parameters: {'schemaref': 'commodity', 'gatewaytimestamp': '2017-09-10T12:43:19.369090Z', 'blacklisted': False, 'schema_test': False, 'message_search': 'null', 'message_valid': True, 'message': '{"$schemaRef": "https://eddn.edcd.io/schemas/commodity/3", "header": {"softwareVersion": "2.4.2.0", "gatewayTimestamp": "2017-09-10T12:43:19.369090Z", "uploaderID": "Jake Valent", "softwareName": "E:D Market Connector [Windows]"}, "message": {"commodities": [{"meanPrice": 110, "demand": 1, "stockBracket": 2, "sellPrice": 86, "name": "Hydrogen Fuel", "stock": 132276, "buyPrice": 90, "demandBracket": 0}, {"meanPrice": 917, "demand": 588783, "stockBracket": 0, "sellPrice": 900, "name": "Hydrogen Peroxide", "stock": 0, "buyPrice": 0, "demandBracket": 3}, {"meanPrice": 263, "demand": 313110, "stockBracket": 0, "sellPrice": 416, "name": "Liquid Oxygen", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 120, "demand": 62211, "stockBracket": 0, "sellPrice": 213, "name": "Water", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 285, "demand": 1, "stockBracket": 2, "sellPrice": 151, "name": "Clothing", "stock": 51836, "buyPrice": 163, "demandBracket": 0}, {"meanPrice": 6769, "demand": 236, "stockBracket": 0, "sellPrice": 6561, "name": "Consumer Technology", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 487, "demand": 1, "stockBracket": 2, "sellPrice": 310, "name": "Domestic Appliances", "stock": 31071, "buyPrice": 326, "demandBracket": 0}, {"meanPrice": 485, "demand": 1, "stockBracket": 3, "sellPrice": 521, "name": "Survival Equipment", "stock": 2801, "buyPrice": 548, "demandBracket": 0}, {"meanPrice": 137, "demand": 61091, "stockBracket": 0, "sellPrice": 194, "name": "Algae", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 1292, "demand": 7003, "stockBracket": 0, "sellPrice": 1637, "name": "Animalmeat", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 1279, "demand": 230, "stockBracket": 0, "sellPrice": 1286, "name": "Coffee", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 406, "demand": 11041, "stockBracket": 0, "sellPrice": 422, "name": "Fish", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 105, "demand": 1, "stockBracket": 2, "sellPrice": 24, "name": "Food Cartridges", "stock": 26565, "buyPrice": 31, "demandBracket": 0}, {"meanPrice": 312, "demand": 833, "stockBracket": 0, "sellPrice": 315, "name": "Fruit And Vegetables", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 210, "demand": 19657, "stockBracket": 0, "sellPrice": 207, "name": "Grain", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 271, "demand": 541, "stockBracket": 0, "sellPrice": 252, "name": "Synthetic Meat", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 1467, "demand": 314, "stockBracket": 0, "sellPrice": 1459, "name": "Tea", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 3132, "demand": 37384, "stockBracket": 0, "sellPrice": 6741, "name": "C M M Composite", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 232, "demand": 589002, "stockBracket": 0, "sellPrice": 391, "name": "Ceramic Composites", "stock": 0, "buyPrice": 0, "demandBracket": 3}, {"meanPrice": 403, "demand": 127104, "stockBracket": 0, "sellPrice": 1661, "name": "Cooling Hoses", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 7837, "demand": 23389, "stockBracket": 0, "sellPrice": 11695, "name": "Insulating Membrane", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 171, "demand": 566738, "stockBracket": 0, "sellPrice": 248, "name": "Polymers", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 967, "demand": 763461, "stockBracket": 0, "sellPrice": 1328, "name": "Semiconductors", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 6609, "demand": 2969, "stockBracket": 0, "sellPrice": 6561, "name": "Superconductors", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 357, "demand": 1, "stockBracket": 2, "sellPrice": 211, "name": "Atmospheric Extractors", "stock": 39916, "buyPrice": 227, "demandBracket": 0}, {"meanPrice": 980, "demand": 1, "stockBracket": 3, "sellPrice": 670, "name": "Building Fabricators", "stock": 8676, "buyPrice": 691, "demandBracket": 0}, {"meanPrice": 2021, "demand": 1, "stockBracket": 2, "sellPrice": 1852, "name": "Crop Harvesters", "stock": 28200, "buyPrice": 1908, "demandBracket": 0}, {"meanPrice": 1011, "demand": 14923, "stockBracket": 0, "sellPrice": 2756, "name": "Emergency Power Cells", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 479, "demand": 18191, "stockBracket": 0, "sellPrice": 2191, "name": "Exhaust Manifold", "stock": 0, "buyPrice": 0, "demandBracket": 3}, {"meanPrice": 1661, "demand": 1, "stockBracket": 3, "sellPrice": 1221, "name": "Geological Equipment", "stock": 297228, "buyPrice": 1259, "demandBracket": 0}, {"meanPrice": 406, "demand": 1, "stockBracket": 3, "sellPrice": 1292, "name": "H N Shock Mount", "stock": 35950, "buyPrice": 1332, "demandBracket": 0}, {"meanPrice": 3916, "demand": 1, "stockBracket": 3, "sellPrice": 3329, "name": "Marine Supplies", "stock": 248426, "buyPrice": 3386, "demandBracket": 0}, {"meanPrice": 443, "demand": 1, "stockBracket": 2, "sellPrice": 423, "name": "Mineral Extractors", "stock": 83886, "buyPrice": 445, "demandBracket": 0}, {"meanPrice": 458, "demand": 1, "stockBracket": 3, "sellPrice": 221, "name": "Power Generators", "stock": 268499, "buyPrice": 232, "demandBracket": 0}, {"meanPrice": 859, "demand": 1, "stockBracket": 3, "sellPrice": 509, "name": "Skimer Components", "stock": 6669, "buyPrice": 525, "demandBracket": 0}, {"meanPrice": 256, "demand": 1, "stockBracket": 3, "sellPrice": 109, "name": "Thermal Cooling Units", "stock": 28884, "buyPrice": 117, "demandBracket": 0}, {"meanPrice": 258, "demand": 1, "stockBracket": 2, "sellPrice": 141, "name": "Water Purifiers", "stock": 16165, "buyPrice": 152, "demandBracket": 0}, {"meanPrice": 1259, "demand": 11781, "stockBracket": 0, "sellPrice": 2820, "name": "Advanced Medicines", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 279, "demand": 1, "stockBracket": 2, "sellPrice": 160, "name": "Basic Medicines", "stock": 11119, "buyPrice": 173, "demandBracket": 0}, {"meanPrice": 6816, "demand": 81, "stockBracket": 0, "sellPrice": 6561, "name": "Performance Enhancers", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 6779, "demand": 64, "stockBracket": 0, "sellPrice": 6561, "name": "Progenitor Cells", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 340, "demand": 136853, "stockBracket": 0, "sellPrice": 353, "name": "Aluminium", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 8288, "demand": 28736, "stockBracket": 0, "sellPrice": 8758, "name": "Beryllium", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 647, "demand": 3491, "stockBracket": 0, "sellPrice": 701, "name": "Cobalt", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 481, "demand": 339151, "stockBracket": 0, "sellPrice": 550, "name": "Copper", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 5135, "demand": 204129, "stockBracket": 0, "sellPrice": 5532, "name": "Gallium", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 9401, "demand": 122783, "stockBracket": 0, "sellPrice": 10145, "name": "Gold", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 5727, "demand": 1677, "stockBracket": 0, "sellPrice": 5743, "name": "Indium", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 1596, "demand": 186572, "stockBracket": 0, "sellPrice": 1881, "name": "Lithium", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 7591, "demand": 143926, "stockBracket": 0, "sellPrice": 11910, "name": "Osmium", "stock": 0, "buyPrice": 0, "demandBracket": 3}, {"meanPrice": 13298, "demand": 99967, "stockBracket": 0, "sellPrice": 13994, "name": "Palladium", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 19279, "demand": 7478, "stockBracket": 0, "sellPrice": 23714, "name": "Platinum", "stock": 0, "buyPrice": 0, "demandBracket": 3}, {"meanPrice": 7156, "demand": 75390, "stockBracket": 0, "sellPrice": 8613, "name": "Praseodymium", "stock": 0, "buyPrice": 0, "demandBracket": 3}, {"meanPrice": 6330, "demand": 79751, "stockBracket": 0, "sellPrice": 8100, "name": "Samarium", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 4775, "demand": 18504, "stockBracket": 0, "sellPrice": 5080, "name": "Silver", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 3962, "demand": 329125, "stockBracket": 0, "sellPrice": 4545, "name": "Tantalum", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 1006, "demand": 5120, "stockBracket": 0, "sellPrice": 1004, "name": "Titanium", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 2705, "demand": 448314, "stockBracket": 0, "sellPrice": 3170, "name": "Uranium", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 57445, "demand": 3740, "stockBracket": 0, "sellPrice": 69301, "name": "Low Temperature Diamond", "stock": 0, "buyPrice": 0, "demandBracket": 3}, {"meanPrice": 40508, "demand": 780, "stockBracket": 0, "sellPrice": 75047, "name": "Painite", "stock": 0, "buyPrice": 0, "demandBracket": 3}, {"meanPrice": 186, "demand": 78596, "stockBracket": 0, "sellPrice": 316, "name": "Beer", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 587, "demand": 1, "stockBracket": 2, "sellPrice": 383, "name": "Liquor", "stock": 1485, "buyPrice": 402, "demandBracket": 0}, {"meanPrice": 260, "demand": 17975, "stockBracket": 0, "sellPrice": 349, "name": "Wine", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"stockBracket": 0, "demand": 52307, "buyPrice": 0, "statusFlags": ["powerplay"], "sellPrice": 3940, "name": "Auto Fabricators", "stock": 0, "demandBracket": 2, "meanPrice": 3734}, {"stockBracket": 2, "demand": 1, "buyPrice": 417, "statusFlags": ["powerplay"], "sellPrice": 396, "name": "Computer Components", "stock": 3112, "demandBracket": 0, "meanPrice": 513}, {"stockBracket": 0, "demand": 612364, "buyPrice": 0, "statusFlags": ["powerplay"], "sellPrice": 464, "name": "Hazardous Environment Suits", "stock": 0, "demandBracket": 3, "meanPrice": 340}, {"meanPrice": 3274, "demand": 2821, "stockBracket": 0, "sellPrice": 5373, "name": "Micro Controllers", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"stockBracket": 0, "demand": 82780, "buyPrice": 0, "statusFlags": ["powerplay"], "sellPrice": 2256, "name": "Robotics", "stock": 0, "demandBracket": 2, "meanPrice": 1856}, {"meanPrice": 507, "demand": 68131, "stockBracket": 0, "sellPrice": 1092, "name": "Conductive Fabrics", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 205, "demand": 693487, "stockBracket": 0, "sellPrice": 367, "name": "Leather", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 439, "demand": 249617, "stockBracket": 0, "sellPrice": 659, "name": "Natural Fabrics", "stock": 0, "buyPrice": 0, "demandBracket": 2}, {"meanPrice": 211, "demand": 132801, "stockBracket": 0, "sellPrice": 196, "name": "Synthetic Fabrics", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 63, "demand": 1, "stockBracket": 2, "sellPrice": 7, "name": "Biowaste", "stock": 13455, "buyPrice": 10, "demandBracket": 0}, {"meanPrice": 48, "demand": 1, "stockBracket": 3, "sellPrice": 18, "name": "Scrap", "stock": 151365, "buyPrice": 21, "demandBracket": 0}, {"meanPrice": 1837, "demand": 314, "stockBracket": 0, "sellPrice": 1766, "name": "Non Lethal Weapons", "stock": 0, "buyPrice": 0, "demandBracket": 1}, {"meanPrice": 2113, "demand": 241, "stockBracket": 0, "sellPrice": 2008, "name": "Reactive Armour", "stock": 0, "buyPrice": 0, "demandBracket": 1}], "systemName": "LP 356-106", "timestamp": "2017-09-10T12:43:23Z", "stationName": "Carrier Dock"}}'}]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 142, in main
+    __db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp,__message_blacklisted, __message_valid, __message_schema_is_test)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 37, in insertMessage
+    except sqlalchemy.exc.OperationalError as ex:
+NameError: name 'sqlalchemy' is not defined
+You have mail in /home/users/athan/Maildir
+athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
+13:43:19 0$
+
+When this happens, as admin user:
+VACUUM FULL messages;
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2017-10-03 11:06:43.891 - eddnlistener - INFO - eddnlistener.eddnarchiveThread: Backfill from EDDN Archive finished
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 111, in main
+    (__eddn_message, __message_valid, __message_blacklisted, __message_schema_is_test) = validateEDDNMessage(__message, __config, __logger)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/utils.py", line 19, in validateEDDNMessage
+    __eddn_message.validate()
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/message/message.py", line 84, in validate
+    validate(self.json, schemainfo["schema"])
+  File "/usr/lib/python3/dist-packages/jsonschema/validators.py", line 478, in validate
+    cls(schema, *args, **kwargs).validate(instance)
+  File "/usr/lib/python3/dist-packages/jsonschema/validators.py", line 123, in validate
+    raise error
+jsonschema.exceptions.ValidationError: Additional properties are not allowed ('prohibited', 'economies' were unexpected)
+
+Failed validating 'additionalProperties' in schema['properties']['message']:
+    {'additionalProperties': False,
+     'properties': {'commodities': {'items': {'additionalProperties': False,
+                                              'properties': {'buyPrice': {'description': 'Price '
+                                                                                         'to '
+                                                                                         'buy '
+                                                                                         'from '
+                                                                                         'the '
+                                                                                         'market',
+                                                                          'type': 'integer'},
+                                                             'demand': {'type': 'integer'},
+                                                             'demandBracket': {'$ref': '#/definitions/levelType'},
+                                                             'meanPrice': {'type': 'integer'},
+                                                             'name': {'description': 'Commodity '
+                                                                                     'name '
+                                                                                     'as '
+                                                                                     'returned '
+                                                                                     'by '
+                                                                                     'the '
+                                                                                     'Companion '
+                                                                                     'API, '
+                                                                                     'misspellings '
+                                                                                     'and '
+                                                                                     'all',
+                                                                      'minLength': 1,
+                                                                      'type': 'string'},
+                                                             'sellPrice': {'description': 'Price '
+                                                                                          'to '
+                                                                                          'sell '
+                                                                                          'to '
+                                                                                          'the '
+                                                                                          'market',
+                                                                           'type': 'integer'},
+                                                             'statusFlags': {'items': {'minLength': 1,
+                                                                                       'type': 'string'},
+                                                                             'minItems': 1,
+                                                                             'type': 'array',
+                                                                             'uniqueItems': True},
+                                                             'stock': {'type': 'integer'},
+                                                             'stockBracket': {'$ref': '#/definitions/levelType'}},
+                                              'required': ['name',
+                                                           'meanPrice',
+                                                           'buyPrice',
+                                                           'stock',
+                                                           'stockBracket',
+                                                           'sellPrice',
+                                                           'demand',
+                                                           'demandBracket'],
+                                              'type': 'object'},
+                                    'minItems': 1,
+                                    'type': 'array'},
+                    'stationName': {'minLength': 1, 'type': 'string'},
+                    'systemName': {'minLength': 1, 'type': 'string'},
+                    'timestamp': {'format': 'date-time', 'type': 'string'}},
+     'required': ['systemName', 'stationName', 'timestamp', 'commodities'],
+     'type': 'object'}
+
+On instance['message']:
+    {'commodities': [{'buyPrice': 94,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 110,
+                      'name': 'HydrogenFuel',
+                      'sellPrice': 90,
+                      'stock': 525167,
+                      'stockBracket': 2},
+                     {'buyPrice': 0,
+                      'demand': 196468,
+                      'demandBracket': 3,
+                      'meanPrice': 917,
+                      'name': 'HydrogenPeroxide',
+                      'sellPrice': 766,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 539230,
+                      'demandBracket': 3,
+                      'meanPrice': 263,
+                      'name': 'LiquidOxygen',
+                      'sellPrice': 351,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 120,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 241,
+                      'name': 'Pesticides',
+                      'sellPrice': 107,
+                      'stock': 20885,
+                      'stockBracket': 2},
+                     {'buyPrice': 0,
+                      'demand': 6333,
+                      'demandBracket': 3,
+                      'meanPrice': 6675,
+                      'name': 'SyntheticReagents',
+                      'sellPrice': 6728,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 59772,
+                      'demandBracket': 1,
+                      'meanPrice': 120,
+                      'name': 'Water',
+                      'sellPrice': 112,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 131792,
+                      'demandBracket': 2,
+                      'meanPrice': 286,
+                      'name': 'Clothing',
+                      'sellPrice': 376,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 5837,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 6766,
+                      'name': 'ConsumerTechnology',
+                      'sellPrice': 5716,
+                      'stock': 57918,
+                      'stockBracket': 2},
+                     {'buyPrice': 0,
+                      'demand': 14392,
+                      'demandBracket': 1,
+                      'meanPrice': 488,
+                      'name': 'DomesticAppliances',
+                      'sellPrice': 475,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 148,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 343,
+                      'name': 'EvacuationShelter',
+                      'sellPrice': 137,
+                      'stock': 9852,
+                      'stockBracket': 3},
+                     {'buyPrice': 296,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 486,
+                      'name': 'SurvivalEquipment',
+                      'sellPrice': 280,
+                      'stock': 4159,
+                      'stockBracket': 3},
+                     {'buyPrice': 0,
+                      'demand': 85470,
+                      'demandBracket': 1,
+                      'meanPrice': 137,
+                      'name': 'Algae',
+                      'sellPrice': 87,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 19939,
+                      'demandBracket': 1,
+                      'meanPrice': 1293,
+                      'name': 'Animalmeat',
+                      'sellPrice': 1158,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 4985,
+                      'demandBracket': 1,
+                      'meanPrice': 1280,
+                      'name': 'Coffee',
+                      'sellPrice': 1158,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 55706,
+                      'demandBracket': 1,
+                      'meanPrice': 407,
+                      'name': 'Fish',
+                      'sellPrice': 363,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 39,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 105,
+                      'name': 'FoodCartridges',
+                      'sellPrice': 30,
+                      'stock': 614577,
+                      'stockBracket': 3},
+                     {'buyPrice': 0,
+                      'demand': 17986,
+                      'demandBracket': 1,
+                      'meanPrice': 313,
+                      'name': 'FruitAndVegetables',
+                      'sellPrice': 284,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 120045,
+                      'demandBracket': 1,
+                      'meanPrice': 210,
+                      'name': 'Grain',
+                      'sellPrice': 187,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 104,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 271,
+                      'name': 'SyntheticMeat',
+                      'sellPrice': 94,
+                      'stock': 578287,
+                      'stockBracket': 3},
+                     {'buyPrice': 0,
+                      'demand': 18089,
+                      'demandBracket': 1,
+                      'meanPrice': 1468,
+                      'name': 'Tea',
+                      'sellPrice': 1314,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 173449,
+                      'demandBracket': 3,
+                      'meanPrice': 5998,
+                      'name': 'CMMComposite',
+                      'sellPrice': 5943,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 1146803,
+                      'demandBracket': 3,
+                      'meanPrice': 231,
+                      'name': 'CeramicComposites',
+                      'sellPrice': 323,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 159081,
+                      'demandBracket': 3,
+                      'meanPrice': 1658,
+                      'name': 'CoolingHoses',
+                      'sellPrice': 1431,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 109228,
+                      'demandBracket': 3,
+                      'meanPrice': 10937,
+                      'name': 'InsulatingMembrane',
+                      'sellPrice': 10422,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 40110,
+                      'demandBracket': 3,
+                      'meanPrice': 88141,
+                      'name': 'MetaAlloys',
+                      'sellPrice': 78368,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 139326,
+                      'demandBracket': 3,
+                      'meanPrice': 5938,
+                      'name': 'NeofabricInsulation',
+                      'sellPrice': 5251,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 862801,
+                      'demandBracket': 2,
+                      'meanPrice': 172,
+                      'name': 'Polymers',
+                      'sellPrice': 177,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 1310810,
+                      'demandBracket': 3,
+                      'meanPrice': 968,
+                      'name': 'Semiconductors',
+                      'sellPrice': 1108,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 100487,
+                      'demandBracket': 2,
+                      'meanPrice': 6613,
+                      'name': 'Superconductors',
+                      'sellPrice': 6108,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 20586,
+                      'demandBracket': 3,
+                      'meanPrice': 7551,
+                      'name': 'ArticulationMotors',
+                      'sellPrice': 6728,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 274,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 357,
+                      'name': 'AtmosphericExtractors',
+                      'sellPrice': 254,
+                      'stock': 52596,
+                      'stockBracket': 2},
+                     {'buyPrice': 702,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 986,
+                      'name': 'BuildingFabricators',
+                      'sellPrice': 678,
+                      'stock': 11434,
+                      'stockBracket': 3},
+                     {'buyPrice': 1763,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 2022,
+                      'name': 'CropHarvesters',
+                      'sellPrice': 1704,
+                      'stock': 37253,
+                      'stockBracket': 2},
+                     {'buyPrice': 0,
+                      'demand': 24958,
+                      'demandBracket': 3,
+                      'meanPrice': 2348,
+                      'name': 'EmergencyPowerCells',
+                      'sellPrice': 2395,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 30417,
+                      'demandBracket': 3,
+                      'meanPrice': 1890,
+                      'name': 'ExhaustManifold',
+                      'sellPrice': 1897,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 1243,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 1665,
+                      'name': 'GeologicalEquipment',
+                      'sellPrice': 1200,
+                      'stock': 389788,
+                      'stockBracket': 3},
+                     {'buyPrice': 0,
+                      'demand': 15043,
+                      'demandBracket': 1,
+                      'meanPrice': 1584,
+                      'name': 'HNShockMount',
+                      'sellPrice': 1590,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 57006,
+                      'demandBracket': 3,
+                      'meanPrice': 2010,
+                      'name': 'HeatsinkInterlink',
+                      'sellPrice': 2129,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 100,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 235,
+                      'name': 'HeliostaticFurnaces',
+                      'sellPrice': 89,
+                      'stock': 290718,
+                      'stockBracket': 2},
+                     {'buyPrice': 0,
+                      'demand': 85509,
+                      'demandBracket': 3,
+                      'meanPrice': 1193,
+                      'name': 'MagneticEmitterCoil',
+                      'sellPrice': 1354,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 3535,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 3916,
+                      'name': 'MarineSupplies',
+                      'sellPrice': 3460,
+                      'stock': 22701,
+                      'stockBracket': 2},
+                     {'buyPrice': 306,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 444,
+                      'name': 'MineralExtractors',
+                      'sellPrice': 290,
+                      'stock': 177820,
+                      'stockBracket': 3},
+                     {'buyPrice': 0,
+                      'demand': 60173,
+                      'demandBracket': 3,
+                      'meanPrice': 2282,
+                      'name': 'ModularTerminals',
+                      'sellPrice': 2011,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 80758,
+                      'demandBracket': 3,
+                      'meanPrice': 1321,
+                      'name': 'PowerConverter',
+                      'sellPrice': 1431,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 417,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 459,
+                      'name': 'PowerGenerators',
+                      'sellPrice': 395,
+                      'stock': 319203,
+                      'stockBracket': 2},
+                     {'buyPrice': 0,
+                      'demand': 45921,
+                      'demandBracket': 3,
+                      'meanPrice': 2612,
+                      'name': 'PowerGridAssembly',
+                      'sellPrice': 2695,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 578,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 870,
+                      'name': 'SkimerComponents',
+                      'sellPrice': 557,
+                      'stock': 4506,
+                      'stockBracket': 3},
+                     {'buyPrice': 138,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 260,
+                      'name': 'ThermalCoolingUnits',
+                      'sellPrice': 128,
+                      'stock': 38460,
+                      'stockBracket': 3},
+                     {'buyPrice': 0,
+                      'demand': 19527,
+                      'demandBracket': 1,
+                      'meanPrice': 259,
+                      'name': 'WaterPurifiers',
+                      'sellPrice': 270,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 24333,
+                      'demandBracket': 2,
+                      'meanPrice': 1258,
+                      'name': 'AdvancedMedicines',
+                      'sellPrice': 1061,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 755,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 1037,
+                      'name': 'AgriculturalMedicines',
+                      'sellPrice': 728,
+                      'stock': 18907,
+                      'stockBracket': 2},
+                     {'buyPrice': 194,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 280,
+                      'name': 'BasicMedicines',
+                      'sellPrice': 179,
+                      'stock': 55073,
+                      'stockBracket': 2},
+                     {'buyPrice': 5510,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 6811,
+                      'name': 'PerformanceEnhancers',
+                      'sellPrice': 5397,
+                      'stock': 72667,
+                      'stockBracket': 3},
+                     {'buyPrice': 0,
+                      'demand': 5711,
+                      'demandBracket': 2,
+                      'meanPrice': 6772,
+                      'name': 'ProgenitorCells',
+                      'sellPrice': 6018,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 842833,
+                      'demandBracket': 2,
+                      'meanPrice': 340,
+                      'name': 'Aluminium',
+                      'sellPrice': 323,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 289443,
+                      'demandBracket': 3,
+                      'meanPrice': 8290,
+                      'name': 'Beryllium',
+                      'sellPrice': 8015,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 645820,
+                      'demandBracket': 3,
+                      'meanPrice': 2283,
+                      'name': 'Bismuth',
+                      'sellPrice': 2540,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 2951687,
+                      'demandBracket': 2,
+                      'meanPrice': 648,
+                      'name': 'Cobalt',
+                      'sellPrice': 826,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 693468,
+                      'demandBracket': 2,
+                      'meanPrice': 481,
+                      'name': 'Copper',
+                      'sellPrice': 486,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 417217,
+                      'demandBracket': 2,
+                      'meanPrice': 5138,
+                      'name': 'Gallium',
+                      'sellPrice': 5056,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 276336,
+                      'demandBracket': 3,
+                      'meanPrice': 9401,
+                      'name': 'Gold',
+                      'sellPrice': 9113,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 474680,
+                      'demandBracket': 2,
+                      'meanPrice': 5732,
+                      'name': 'Indium',
+                      'sellPrice': 5590,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 462204,
+                      'demandBracket': 3,
+                      'meanPrice': 8767,
+                      'name': 'Lanthanum',
+                      'sellPrice': 8578,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 2136707,
+                      'demandBracket': 3,
+                      'meanPrice': 1598,
+                      'name': 'Lithium',
+                      'sellPrice': 1779,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 727658,
+                      'demandBracket': 3,
+                      'meanPrice': 9136,
+                      'name': 'Osmium',
+                      'sellPrice': 8114,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 506816,
+                      'demandBracket': 3,
+                      'meanPrice': 13295,
+                      'name': 'Palladium',
+                      'sellPrice': 12544,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 37802,
+                      'demandBracket': 3,
+                      'meanPrice': 19756,
+                      'name': 'Platinum',
+                      'sellPrice': 17723,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 381155,
+                      'demandBracket': 3,
+                      'meanPrice': 8604,
+                      'name': 'Praseodymium',
+                      'sellPrice': 7621,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 403205,
+                      'demandBracket': 3,
+                      'meanPrice': 8090,
+                      'name': 'Samarium',
+                      'sellPrice': 7160,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 784023,
+                      'demandBracket': 3,
+                      'meanPrice': 4777,
+                      'name': 'Silver',
+                      'sellPrice': 4932,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 1155070,
+                      'demandBracket': 2,
+                      'meanPrice': 3965,
+                      'name': 'Tantalum',
+                      'sellPrice': 4025,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 901193,
+                      'demandBracket': 3,
+                      'meanPrice': 3618,
+                      'name': 'Thallium',
+                      'sellPrice': 3866,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 375673,
+                      'demandBracket': 3,
+                      'meanPrice': 11512,
+                      'name': 'Thorium',
+                      'sellPrice': 11037,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 313008,
+                      'demandBracket': 2,
+                      'meanPrice': 1007,
+                      'name': 'Titanium',
+                      'sellPrice': 959,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 1567307,
+                      'demandBracket': 2,
+                      'meanPrice': 2707,
+                      'name': 'Uranium',
+                      'sellPrice': 2791,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 255374,
+                      'demandBracket': 3,
+                      'meanPrice': 8530,
+                      'name': 'Bromellite',
+                      'sellPrice': 7604,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 1086918,
+                      'demandBracket': 3,
+                      'meanPrice': 2265,
+                      'name': 'Cryolite',
+                      'sellPrice': 2395,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 1493688,
+                      'demandBracket': 3,
+                      'meanPrice': 1821,
+                      'name': 'Gallite',
+                      'sellPrice': 2125,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 109748,
+                      'demandBracket': 3,
+                      'meanPrice': 5644,
+                      'name': 'LithiumHydroxide',
+                      'sellPrice': 4937,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 31565,
+                      'demandBracket': 3,
+                      'meanPrice': 57443,
+                      'name': 'LowTemperatureDiamond',
+                      'sellPrice': 51857,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 238489,
+                      'demandBracket': 3,
+                      'meanPrice': 2284,
+                      'name': 'MethanolMonohydrateCrystals',
+                      'sellPrice': 2011,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 7893,
+                      'demandBracket': 3,
+                      'meanPrice': 40504,
+                      'name': 'Painite',
+                      'sellPrice': 36786,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 2011326,
+                      'demandBracket': 3,
+                      'meanPrice': 1566,
+                      'name': 'Pyrophyllite',
+                      'sellPrice': 1692,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 6890343,
+                      'demandBracket': 3,
+                      'meanPrice': 300,
+                      'name': 'Rutile',
+                      'sellPrice': 472,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 276666,
+                      'demandBracket': 2,
+                      'meanPrice': 187,
+                      'name': 'Beer',
+                      'sellPrice': 277,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 9793,
+                      'demandBracket': 2,
+                      'meanPrice': 589,
+                      'name': 'Liquor',
+                      'sellPrice': 744,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 10642,
+                      'demandBracket': 1,
+                      'meanPrice': 5028,
+                      'name': 'Tobacco',
+                      'sellPrice': 4318,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 225919,
+                      'demandBracket': 2,
+                      'meanPrice': 261,
+                      'name': 'Wine',
+                      'sellPrice': 364,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 2284,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 2943,
+                      'name': 'AdvancedCatalysers',
+                      'sellPrice': 2235,
+                      'stock': 24813,
+                      'stockBracket': 2},
+                     {'buyPrice': 183,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 324,
+                      'name': 'AnimalMonitors',
+                      'sellPrice': 169,
+                      'stock': 261177,
+                      'stockBracket': 2},
+                     {'buyPrice': 159,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 314,
+                      'name': 'AquaponicSystems',
+                      'sellPrice': 147,
+                      'stock': 48453,
+                      'stockBracket': 2},
+                     {'buyPrice': 0,
+                      'demand': 37217,
+                      'demandBracket': 2,
+                      'meanPrice': 3732,
+                      'name': 'AutoFabricators',
+                      'sellPrice': 3351,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 702,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 997,
+                      'name': 'BioReducingLichen',
+                      'sellPrice': 676,
+                      'stock': 15360,
+                      'stockBracket': 2},
+                     {'buyPrice': 0,
+                      'demand': 545899,
+                      'demandBracket': 3,
+                      'meanPrice': 514,
+                      'name': 'ComputerComponents',
+                      'sellPrice': 678,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 27444,
+                      'demandBracket': 3,
+                      'meanPrice': 6863,
+                      'name': 'DiagnosticSensor',
+                      'sellPrice': 6728,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 424215,
+                      'demandBracket': 2,
+                      'meanPrice': 338,
+                      'name': 'HazardousEnvironmentSuits',
+                      'sellPrice': 322,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 2081,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 2852,
+                      'name': 'MedicalDiagnosticEquipment',
+                      'sellPrice': 2036,
+                      'stock': 54870,
+                      'stockBracket': 3},
+                     {'buyPrice': 4812,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 5556,
+                      'name': 'MicroControllers',
+                      'sellPrice': 4712,
+                      'stock': 20904,
+                      'stockBracket': 2},
+                     {'buyPrice': 0,
+                      'demand': 82329,
+                      'demandBracket': 3,
+                      'meanPrice': 2171,
+                      'name': 'Nanobreakers',
+                      'sellPrice': 1897,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 4966,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 5954,
+                      'name': 'ResonatingSeparators',
+                      'sellPrice': 4863,
+                      'stock': 352174,
+                      'stockBracket': 2},
+                     {'buyPrice': 0,
+                      'demand': 110362,
+                      'demandBracket': 2,
+                      'meanPrice': 1854,
+                      'name': 'Robotics',
+                      'sellPrice': 1798,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 1243,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 1790,
+                      'name': 'StructuralRegulators',
+                      'sellPrice': 1200,
+                      'stock': 33766,
+                      'stockBracket': 3},
+                     {'buyPrice': 0,
+                      'demand': 61219,
+                      'demandBracket': 3,
+                      'meanPrice': 3070,
+                      'name': 'TelemetrySuite',
+                      'sellPrice': 2695,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 4037,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 4885,
+                      'name': 'TerrainEnrichmentSystems',
+                      'sellPrice': 3953,
+                      'stock': 16544,
+                      'stockBracket': 2},
+                     {'buyPrice': 0,
+                      'demand': 1136100,
+                      'demandBracket': 3,
+                      'meanPrice': 507,
+                      'name': 'ConductiveFabrics',
+                      'sellPrice': 617,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 745042,
+                      'demandBracket': 3,
+                      'meanPrice': 205,
+                      'name': 'Leather',
+                      'sellPrice': 292,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 2799152,
+                      'demandBracket': 3,
+                      'meanPrice': 439,
+                      'name': 'NaturalFabrics',
+                      'sellPrice': 557,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 0,
+                      'demand': 1103433,
+                      'demandBracket': 2,
+                      'meanPrice': 211,
+                      'name': 'SyntheticFabrics',
+                      'sellPrice': 261,
+                      'stock': 0,
+                      'stockBracket': 0},
+                     {'buyPrice': 16,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 63,
+                      'name': 'Biowaste',
+                      'sellPrice': 12,
+                      'stock': 23819,
+                      'stockBracket': 2},
+                     {'buyPrice': 32,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 49,
+                      'name': 'Scrap',
+                      'sellPrice': 28,
+                      'stock': 147369,
+                      'stockBracket': 2},
+                     {'buyPrice': 1243,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 1834,
+                      'name': 'NonLethalWeapons',
+                      'sellPrice': 1200,
+                      'stock': 96569,
+                      'stockBracket': 3},
+                     {'buyPrice': 1616,
+                      'demand': 1,
+                      'demandBracket': 0,
+                      'meanPrice': 2108,
+                      'name': 'ReactiveArmour',
+                      'sellPrice': 1562,
+                      'stock': 30258,
+                      'stockBracket': 2}],
+     'economies': [{'name': 'HighTech', 'proportion': 0.67},
+                   {'name': 'Industrial', 'proportion': 0.33}],
+     'prohibited': ['BasicNarcotics',
+                    'BattleWeapons',
+                    'BootlegLiquor',
+                    'CombatStabilisers',
+                    'ImperialSlaves',
+                    'Landmines',
+                    'PersonalWeapons',
+                    'Slaves',
+                    'ToxicWaste'],
+     'stationName': 'Jameson Memorial',
+     'systemName': 'Shinrarta Dezhra',
+     'timestamp': '2017-10-03T12:02:19Z'}
+athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
+13:02:24 0$ 
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2017-10-26 02:11:45.543 - eddnlistener - INFO - utils.validateEDDNMessage: Blacklisted EDDiscovery (8.1.4.0)
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.InternalError: invalid page in block 455875 of relation base/16394/11999444
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 35, in insertMessage
+    session.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 801, in commit
+    self.transaction.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 392, in commit
+    self._prepare_impl()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 372, in _prepare_impl
+    self.session.flush()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2019, in flush
+    self._flush(objects)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2137, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/langhelpers.py", line 60, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 186, in reraise
+    raise value
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2101, in _flush
+    flush_context.execute()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 373, in execute
+    rec.execute(self)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 532, in execute
+    uow
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 174, in save_obj
+    mapper, table, insert)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 800, in _emit_insert_statements
+    execute(statement, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 914, in execute
+    return meth(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/sql/elements.py", line 323, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1010, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1146, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1341, in _handle_dbapi_exception
+    exc_info
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 202, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 185, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.InternalError: (psycopg2.InternalError) invalid page in block 455875 of relation base/16394/11999444
+ [SQL: 'INSERT INTO messages (message, message_search, blacklisted, message_valid, schema_test, schemaref, gatewaytimestamp) VALUES (%(message)s, %(message_search)s, %(blacklisted)s, %(message_valid)s, %(schema_test)s, %(schemaref)s, %(gatewaytimestamp)s) RETURNING messages.id'] [parameters: {'message': '{"message": {"SystemGovernment": "$government_Democracy;", "Population": 82574191, "Body": "Newton Hub", "SystemSecurity": "$SYSTEM_SECURITY_high;", "event": "Location", "StationName": "Newton Hub", "StarPos": [4.844, 49.563, -13.313], "Docked": true, "BodyType": "Station", "StarSystem": "GD 140", "SystemAllegiance": "Federation", "FactionState": "Boom", "SystemFaction": "Progressive Party of GD 140", "StationType": "Coriolis", "Factions": [{"Name": "Progressive Party of GD 140", "Influence": 0.328328, "Allegiance": "Federation", "Government": "Democracy", "FactionState": "Boom"}, {"Name": "Pilots Federation Local Branch", "Influence": 0.0, "Allegiance": "PilotsFederation", "Government": "Democracy", "FactionState": "None"}, {"Name": "Parcae Dynamic PLC", "Allegiance": "Federation", "FactionState": "None", "Influence": 0.081081, "Government": "Corporate", "PendingStates": [{"State": "Boom", "Trend": 1}]}, {"Name": "LHS 2430 for Equality", "Influence": 0.078078, "Allegiance": "Federation", "Government": "Democracy", "FactionState": "War"}, {"Name": "GD 140 & Co", "Allegiance": "Federation", "FactionState": "Boom", "Influence": 0.084084, "Government": "Corporate", "PendingStates": [{"State": "Election", "Trend": 0}]}, {"Name": "United GD 140 Liberty Party", "Allegiance": "Independent", "FactionState": "War", "Influence": 0.052052, "Government": "Dictatorship", "PendingStates": [{"State": "Boom", "Trend": 1}]}, {"Name": "LP 320-359 Public Services", "Influence": 0.14014, "Allegiance": "Federation", "Government": "Corporate", "FactionState": "Boom"}, {"Name": "GD 140 Systems", "Allegiance": "Federation", "FactionState": "Boom", "Influence": 0.084084, "Government": "Corporate", "PendingStates": [{"State": "Election", "Trend": 0}]}, {"Name": "Foyama Novingo Startourism", "Influence": 0.152152, "Allegiance": "Empire", "Government": "Corporate", "FactionState": "Boom"}], "SystemEconomy": "$economy_HighTech;", "timestamp": "2017-10-27T00:35:56Z"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1", "header": {"uploaderID": "Asim Zaman", "gatewayTimestamp": "2017-10-27T00:35:56.830692Z", "softwareName": "E:D Market Connector [Windows]", "softwareVersion": "2.4.4.0"}}', 'message_valid': True, 'schema_test': False, 'schemaref': 'journal', 'message_search': 'null', 'gatewaytimestamp': '2017-10-27T00:35:56.830692Z', 'blacklisted': False}]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 142, in main
+    __db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp,__message_blacklisted, __message_valid, __message_schema_is_test)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 37, in insertMessage
+    except sqlalchemy.exc.OperationalError as ex:
+NameError: name 'sqlalchemy' is not defined
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2017-11-05 04:15:34.039 - eddnlistener - INFO - utils.validateEDDNMessage: Blacklisted EDDiscovery (8.1.4.0)
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.InternalError: invalid page in block 387798 of relation base/16394/14167236
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 35, in insertMessage
+    session.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 801, in commit
+    self.transaction.commit()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 392, in commit
+    self._prepare_impl()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 372, in _prepare_impl
+    self.session.flush()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2019, in flush
+    self._flush(objects)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2137, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/langhelpers.py", line 60, in __exit__
+    compat.reraise(exc_type, exc_value, exc_tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 186, in reraise
+    raise value
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/session.py", line 2101, in _flush
+    flush_context.execute()
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 373, in execute
+    rec.execute(self)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/unitofwork.py", line 532, in execute
+    uow
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 174, in save_obj
+    mapper, table, insert)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/orm/persistence.py", line 800, in _emit_insert_statements
+    execute(statement, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 914, in execute
+    return meth(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/sql/elements.py", line 323, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1010, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1146, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1341, in _handle_dbapi_exception
+    exc_info
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 202, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/util/compat.py", line 185, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.InternalError: (psycopg2.InternalError) invalid page in block 387798 of relation base/16394/14167236
+ [SQL: 'INSERT INTO messages (message, message_search, blacklisted, message_valid, schema_test, schemaref, gatewaytimestamp) VALUES (%(message)s, %(message_search)s, %(blacklisted)s, %(message_valid)s, %(schema_test)s, %(schemaref)s, %(gatewaytimestamp)s) RETURNING messages.id'] [parameters: {'blacklisted': False, 'schema_test': False, 'message_valid': True, 'gatewaytimestamp': '2017-11-05T17:27:39.731934Z', 'message_search': 'null', 'message': '{"header": {"softwareVersion": "8.4.1.0", "uploaderID": "roy S", "softwareName": "EDDiscovery", "gatewayTimestamp": "2017-11-05T17:27:39.731934Z"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1", "message": {"OrbitalPeriod": 281284.53125, "Atmosphere": "", "TidalLock": true, "Materials": [{"Name": "iron", "Percent": 21.689142}, {"Name": "nickel", "Percent": 16.404758}, {"Name": "sulphur", "Percent": 15.611857}, {"Name": "carbon", "Percent": 13.127954}, {"Name": "chromium", "Percent": 9.754329}, {"Name": "phosphorus", "Percent": 8.404741}, {"Name": "zinc", "Percent": 5.894297}, {"Name": "germanium", "Percent": 4.606871}, {"Name": "cadmium", "Percent": 1.68426}, {"Name": "niobium", "Percent": 1.482337}, {"Name": "ruthenium", "Percent": 1.339443}], "BodyName": "Swoiwns CZ-B c2-14 2", "Volcanism": "", "StarPos": [-1331.156, -124.531, 297.094], "AtmosphereType": "None", "OrbitalInclination": 2.362799, "TerraformState": "", "DistanceFromArrivalLS": 15.192152, "timestamp": "2017-05-01T18:40:02Z", "Radius": 5760867.0, "SurfaceTemperature": 877.139221, "MassEM": 0.828879, "PlanetClass": "High metal content body", "SemiMajorAxis": 67939072.0, "Periapsis": 33.418346, "event": "Scan", "Eccentricity": 0.064532, "Landable": true, "SurfaceGravity": 9.954625, "SurfacePressure": 0.0, "StarSystem": "Swoiwns CZ-B c2-14", "RotationPeriod": 1377771.25}}', 'schemaref': 'journal'}]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 142, in main
+    __db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp,__message_blacklisted, __message_valid, __message_schema_is_test)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 37, in insertMessage
+    except sqlalchemy.exc.OperationalError as ex:
+NameError: name 'sqlalchemy' is not defined
+athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
+17:27:39 0$
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+qlalchemy.exc.InternalError: (psycopg2.InternalError) invalid page in block 358186 of relation base/16394/14167235
+ [SQL: 'INSERT INTO messages (message, message_search, blacklisted, message_valid, schema_test, schemaref, gatewaytimestamp) VALUES (%(message)s, %(message_search)s, %(blacklisted)s, %(message_valid)s, %(schema_test)s, %(schemaref)s, %(gatewaytimestamp)s) RETURNING messages.id'] [parameters: {'schemaref': 'journal', 'message_valid': True, 'gatewaytimestamp': '2017-11-15T10:45:09.536215Z', 'blacklisted': False, 'message': '{"message": {"SystemSecurity": "$GAlAXY_MAP_INFO_state_anarchy;", "SystemEconomy": "$economy_None;", "Population": 0, "StarPos": [11.0, -52.438, 40.813], "SystemGovernment": "$government_None;", "StarSystem": "LP 283-3", "event": "FSDJump", "timestamp": "2017-11-15T10:38:54Z", "SystemAllegiance": ""}, "header": {"softwareName": "E:D Market Connector [Windows]", "softwareVersion": "2.4.6.1", "uploaderID": "MusTheBunneh", "gatewayTimestamp": "2017-11-15T10:45:09.536215Z"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1"}', 'message_search': 'null', 'schema_test': False}]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 142, in main
+    __db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp,__message_blacklisted, __message_valid, __message_schema_is_test)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 37, in insertMessage
+    except sqlalchemy.exc.OperationalError as ex:
+NameError: name 'sqlalchemy' is not defined
+athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
+10:45:09 0$
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+sqlalchemy.exc.InternalError: (psycopg2.InternalError) invalid page in block 328
+742 of relation base/16394/16282581
+03:26:01
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2017-11-29 11:12:17.325 - eddnlistener - INFO - eddnlistener.eddnarchiveThread: 
+Backfill from EDDN Archive finished
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/base.py", line 1139, in
+ _execute_context
+    context)
+  File "/usr/lib/python3/dist-packages/sqlalchemy/engine/default.py", line 450, 
+in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.InternalError: number of items mismatch in GIN entry tuple, 645 in tupl
+e header, 717 decoded
+...
+sqlalchemy.exc.InternalError: (psycopg2.InternalError) number of items mismatch in GIN entry tuple, 645 in tuple header, 717 decoded
+ [SQL: 'INSERT INTO messages (message, message_search, blacklisted, message_valid, schema_test, schemaref, gatewaytimestamp) VALUES (%(message)s, %(message_search)s, %(blacklisted)s, %(message_valid)s, %(schema_test)s, %(schemaref)s, %(gatewaytimestamp)s) RETURNING messages.id'] [parameters: {'message_search': 'null', 'gatewaytimestamp': '2017-12-01T23:05:09.577105Z', 'schema_test': False, 'blacklisted': False, 'message': '{"message": {"Powers": ["A. Lavigny-Duval"], "Factions": [{"Government": "Democracy", "RecoveringStates": [{"State": "CivilUnrest", "Trend": -1}], "Name": "Independent CD-39 4830 Independents", "FactionState": "Boom", "Influence": 0.428428, "Allegiance": "Federation"}, {"Government": "Corporate", "Name": "Mawurunche Incorporated", "PendingStates": [{"State": "Boom", "Trend": 1}], "FactionState": "Election", "Influence": 0.081081, "Allegiance": "Federation"}, {"Government": "Democracy", "FactionState": "None", "Influence": 0.0, "Name": "Pilots Federation Local Branch", "Allegiance": "PilotsFederation"}, {"Government": "Corporate", "FactionState": "Boom", "Influence": 0.167167, "Name": "Smei Ti Group", "Allegiance": "Federation"}, {"Government": "Corporate", "RecoveringStates": [{"State": "Boom", "Trend": 0}], "Name": "CD-39 4830 Network", "FactionState": "Election", "Influence": 0.1001, "Allegiance": "Independent"}, {"Government": "Dictatorship", "FactionState": "Boom", "Influence": 0.057057, "Name": "CD-39 4830 Defence Force", "Allegiance": "Independent"}, {"Government": "Corporate", "FactionState": "Boom", "Influence": 0.111111, "Name": "CD-39 4830 Comms Limited", "Allegiance": "Independent"}, {"Government": "Anarchy", "FactionState": "Boom", "Influence": 0.055055, "Name": "CD-39 4830 Purple Boys", "Allegiance": "Independent"}], "StarSystem": "CD-39 4830", "StarPos": [114.406, 5.188, -17.406], "PowerplayState": "Exploited", "SystemFaction": "Independent CD-39 4830 Independents", "timestamp": "2017-12-01T23:05:17Z", "SystemAllegiance": "Federation", "SystemGovernment": "$government_Democracy;", "FactionState": "Boom", "Population": 6660166084, "SystemEconomy": "$economy_Agri;", "event": "FSDJump", "SystemSecurity": "$SYSTEM_SECURITY_medium;"}, "$schemaRef": "https://eddn.edcd.io/schemas/journal/1", "header": {"uploaderID": "HELIOS MEGALOS", "gatewayTimestamp": "2017-12-01T23:05:09.577105Z", "softwareName": "E:D Market Connector [Windows]", "softwareVersion": "2.4.6.1"}}', 'message_valid': True, 'schemaref': 'journal'}]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 142, in main
+    __db.insertMessage(__eddn_message.json, __eddn_message.schemaref, __eddn_message.gatewaytimestamp,__message_blacklisted, __message_valid, __message_schema_is_test)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/database/database.py", line 37, in insertMessage
+    except sqlalchemy.exc.OperationalError as ex:
+NameError: name 'sqlalchemy' is not defined
+athan@tuesday:/mnt/tuesday/data0/edda/edda.git/eddn-listener;
+23:05:09 0$
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+10:07:51 0$ ./start-eddnlistener.sh
+2018-01-05 10:07:54.557 - eddnlistener - INFO - eddnlistener.main: Initialising Database Connection
+2018-01-05 10:07:54.585 - eddnlistener - INFO - eddnlistener.main: Starting EDDN Subscriber
+2018-01-05 10:07:54.585 - eddnlistener - INFO - eddnlistener.main: Connect to tcp://eddn.edcd.io:9500
+Traceback (most recent call last):
+  File "./eddnlistener.py", line 175, in <module>
+    main()
+  File "./eddnlistener.py", line 111, in main
+    (__eddn_message, __message_valid, __message_blacklisted, __message_schema_is_test) = validateEDDNMessage(__message, __config, __logger)
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/utils.py", line 19, in validateEDDNMessage
+    __eddn_message.validate()
+  File "/mnt/tuesday/data0/edda/edda.git/eddn-listener/eddn/message/message.py", line 46, in validate
+    self.gatewaytimestamp = self.json['header']['gatewayTimestamp']
+KeyError: 'gatewayTimestamp'
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
