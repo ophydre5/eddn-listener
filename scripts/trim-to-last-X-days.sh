@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "DELETE FROM messages WHERE gatewaytimestamp < (CURRENT_TIMESTAMP - interval '40 days');" \
+echo "DELETE FROM messages WHERE gatewaytimestamp < (CURRENT_TIMESTAMP - interval '30 days');" \
 	| psql \
 			--host=localhost \
 			--username eddnadmin \
