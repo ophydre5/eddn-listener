@@ -23,6 +23,7 @@ import threading
 """
 __relayEDDN       = 'tcp://eddn.edcd.io:9500'
 __timeoutEDDN       = 600000
+__zmqReceiveHWMLimit = 20
 
 # Set False to listen to production stream
 __debugEDDN       = False
@@ -78,6 +79,7 @@ def main():
   
   __subscriber.setsockopt(zmq.SUBSCRIBE, b"")
   __subscriber.setsockopt(zmq.RCVTIMEO, __timeoutEDDN)
+  __subscriber.setsockopt(zmq.RCVHWM, __zmqReceiveHWMLimit)
 
 
   __logger.info('Starting EDDN Subscriber')
