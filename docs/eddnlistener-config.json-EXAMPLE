@@ -19,7 +19,11 @@
 		},
 		{
 			"softwarename":"eddi",
-			"goodversion":"2.2"
+			"goodversion":"3.0.2"
+		},
+		{
+			"softwarename":"eddiscovery",
+			"goodversion":"8.1.5.0"
 		}
 	],
 	"schemas":
